@@ -49,7 +49,7 @@ var stripDebug = require('gulp-strip-debug');
 // Copy all files at the root level (app)
 gulp.task('copy', function () {
     gulp.src([
-        'src/oil/page/**'
+        'src/admin/page/**'
     ], {
         dot: true
     }).pipe(gulp.dest(dest + "page")).pipe(plugins.size({
@@ -57,7 +57,7 @@ gulp.task('copy', function () {
     }));
 
     gulp.src([
-        'src/oil/img/**'
+        'src/admin/img/**'
     ], {
         dot: true
     }).pipe(imagemin({
@@ -73,8 +73,7 @@ gulp.task('copy', function () {
     }));
 
     gulp.src([
-        'src/oil/index.html',
-        'src/oil/favicon.ico'
+        'src/admin/index.html'
     ], {
         dot: true
     }).pipe(gulp.dest(root))
@@ -132,7 +131,7 @@ gulp.task('clean', del.bind(null, ['dist/*'], {
 
 gulp.task('buildlib', function () {
     return browserify({
-        entries: ['src/oil/lib/lib.js']
+        entries: ['src/admin/lib/lib.js']
     })
         .bundle()
         .pipe(source('lib.js'))
@@ -176,7 +175,7 @@ function getFileList(dir) {
 }
 
 gulp.task('buildjs', function () {
-    var files = getFileList('src/oil/js');
+    var files = getFileList('src/admin/js');
 
     return watchify(browserify({
         entries: files
@@ -189,7 +188,6 @@ gulp.task('buildjs', function () {
         })
 
         .pipe(source('app.js'))
-        .pipe(replace("Const.server = 'http://oil.baidu.com'", "Const.server = ''"))
         .pipe(buffer())
         //.pipe(stripDebug())
         //.pipe(uglify())
@@ -197,7 +195,7 @@ gulp.task('buildjs', function () {
 });
 
 gulp.task('buildreleasejs', function () {
-    var files = getFileList('src/oil/js');
+    var files = getFileList('src/admin/js');
 
     return browserify({
         entries: files
@@ -216,7 +214,7 @@ gulp.task('buildreleasejs', function () {
 });
 
 gulp.task('buildzipreleasejs', function () {
-    var files = getFileList('src/oil/js');
+    var files = getFileList('src/admin/js');
 
     return browserify({
         entries: files
@@ -236,7 +234,7 @@ gulp.task('buildzipreleasejs', function () {
 });
 
 gulp.task('buildmockjs', function () {
-    var files = getFileList('src/oil/js');
+    var files = getFileList('src/admin/js');
 
     return watchify(browserify({
         entries: files
@@ -294,7 +292,7 @@ gulp.task('server', function () {
 //        }
     });
 
-    gulp.watch("src/oil/sass/*", ["compass"]);
+    gulp.watch("src/admin/sass/*", ["compass"]);
     //gulp.watch("./dist/**", function () {
     //    console.log("dist change");
     //    gulp.src('./dist/**')
@@ -308,11 +306,11 @@ gulp.task('server', function () {
 });
 
 gulp.task('watchjs', function () {
-    gulp.watch("src/oil/js/**/*", ["buildjs"]);
+    gulp.watch("src/admin/js/**/*", ["buildjs"]);
 });
 
 gulp.task('watchmockjs', function () {
-    gulp.watch("src/oil/js/**/*", ["buildmockjs"]);
+    gulp.watch("src/admin/js/**/*", ["buildmockjs"]);
 });
 
 gulp.task('buildall', ['copy', 'buildlib', 'buildjs', 'compass'], function () {
