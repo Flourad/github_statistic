@@ -13,8 +13,10 @@ var PROXY_HOST = '127.0.0.1';
 var PROXY_PORT = process.env.port || 8000;
 var SERVER_HOST = '127.0.0.1';
 var SERVER_PORT = 8080;
-var OIL_SERVER_HOST = !TEST ? 'oil.baidu.com' : 'nj03-map-carlife-caroil01.nj03.baidu.com';
-var OIL_SERVER_PORT = !TEST ? 80 : 8240;
+//var OIL_SERVER_HOST = !TEST ? 'oil.baidu.com' : 'nj03-map-carlife-caroil01.nj03.baidu.com';
+//var OIL_SERVER_PORT = !TEST ? 80 : 8240;
+var OIL_SERVER_HOST =  'cp01-rdqa-dev316.cp01.baidu.com';
+var OIL_SERVER_PORT =  8244;
 
 // calculate host ip dynamically
 var ifaces = os.networkInterfaces();
@@ -87,7 +89,10 @@ http.createServer(function (proxyReq, proxyResp) {
         headers: headers,
         method: proxyReq.method
     };
-    if ('/car' === params.pathname.substr(0, '/car'.length)) {
+    console.log('params.pathname=',params.pathname);
+    console.log(params.pathname.substr(1, 'admin'.length));
+    if ('admin' === params.pathname.substr(1, 'admin'.length)) {
+        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
         headers.host = OIL_SERVER_HOST;
 //        if (params.query.hasOwnProperty('bduss')) {
 //            headers['Cookie'] = 'BDUSS=' + params.query.bduss;
@@ -100,11 +105,11 @@ http.createServer(function (proxyReq, proxyResp) {
             method: proxyReq.method
         };
     } else if ('/mock' === params.pathname.substr(0, '/mock'.length)) {
-        console.log(proxyReq.method, proxyReq.url);
-        proxyResp.writeHead(200);
-        proxyResp.write('(' + mock + ')' + '(' + JSON.stringify(params.query) + ');');
-        proxyResp.end();
-        return;
+        //console.log(proxyReq.method, proxyReq.url);
+        //proxyResp.writeHead(200);
+        //proxyResp.write('(' + mock + ')' + '(' + JSON.stringify(params.query) + ');');
+        //proxyResp.end();
+        //return;
     }
 
     var req = http.request(reqOptions, function (res) {
@@ -115,7 +120,7 @@ http.createServer(function (proxyReq, proxyResp) {
         }
         var resHeaders = res.headers;
 
-        if (reqOptions.host === 'nj03-map-carlife-caroil01.nj03.baidu.com') {
+        if (reqOptions.host === 'cp01-rdqa-dev316.cp01.baidu.com') {
             modifySetCookie(resHeaders);
 //            resHeaders['Access-Control-Allow-Origin'] = 'http://127.0.0.1:' + PROXY_PORT;
 //            resHeaders['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
@@ -134,7 +139,7 @@ http.createServer(function (proxyReq, proxyResp) {
         });
         res.on('end', function () {
             proxyResp.end();
-            if (reqOptions.host === 'oil.baidu.com') {
+            if (reqOptions.host === 'cp01-rdqa-dev316.cp01.baidu.com') {
 //                console.log(body);
             }
         });

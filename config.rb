@@ -3,14 +3,14 @@ require 'compass/import-once/activate'
 
 # Set this to the root of your project when deployed:
 
-version = "feak"
+version = "station"
 
 dest = "dist/" + version + "/";
 
 project_path = "."
 css_dir = dest + "static/css/"
-sass_dir = "src/oil/sass/"
-images_dir = "src/oil/"
+sass_dir = "src/station/sass/"
+images_dir = "src/station/"
 generated_images_dir = dest + "/static/img/"
 http_generated_images_path = "../img"
 

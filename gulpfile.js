@@ -41,7 +41,7 @@ var manifest = require('gulp-manifest');
 
 var root = './dist/';
 
-var dest = root + 'admin/';
+var dest = root + 'station/';
 
 var connect = require("gulp-connect");
 var stripDebug = require('gulp-strip-debug');
@@ -57,7 +57,7 @@ gulp.task('copy', function () {
     //}));
 
     gulp.src([
-        'src/admin/img/**'
+        'src/station/img/**'
     ], {
         dot: true
     }).pipe(imagemin({
@@ -73,7 +73,7 @@ gulp.task('copy', function () {
     }));
 
     gulp.src([
-        'src/admin/index.html'
+        'src/station/index.html'
     ], {
         dot: true
     }).pipe(gulp.dest(root))
@@ -131,7 +131,7 @@ gulp.task('clean', del.bind(null, ['dist/*'], {
 
 gulp.task('buildlib', function () {
     return browserify({
-        entries: ['src/admin/lib/lib.js']
+        entries: ['src/station/lib/lib.js']
     })
         .bundle()
         .pipe(source('lib.js'))
@@ -175,7 +175,7 @@ function getFileList(dir) {
 }
 
 gulp.task('buildjs', function () {
-    var files = getFileList('src/admin/js');
+    var files = getFileList('src/station/js');
 
     return watchify(browserify({
         entries: files
@@ -195,7 +195,7 @@ gulp.task('buildjs', function () {
 });
 
 gulp.task('buildreleasejs', function () {
-    var files = getFileList('src/admin/js');
+    var files = getFileList('src/station/js');
 
     return browserify({
         entries: files
@@ -214,7 +214,7 @@ gulp.task('buildreleasejs', function () {
 });
 
 gulp.task('buildzipreleasejs', function () {
-    var files = getFileList('src/admin/js');
+    var files = getFileList('src/station/js');
 
     return browserify({
         entries: files
@@ -234,7 +234,7 @@ gulp.task('buildzipreleasejs', function () {
 });
 
 gulp.task('buildmockjs', function () {
-    var files = getFileList('src/admin/js');
+    var files = getFileList('src/station/js');
 
     return watchify(browserify({
         entries: files
@@ -292,7 +292,7 @@ gulp.task('server', function () {
 //        }
     });
 
-    gulp.watch("src/admin/sass/*", ["compass"]);
+    gulp.watch("src/station/sass/*", ["compass"]);
     //gulp.watch("./dist/**", function () {
     //    console.log("dist change");
     //    gulp.src('./dist/**')
@@ -306,11 +306,11 @@ gulp.task('server', function () {
 });
 
 gulp.task('watchjs', function () {
-    gulp.watch("src/admin/js/**/*", ["buildjs"]);
+    gulp.watch("src/station/js/**/*", ["buildjs"]);
 });
 
 gulp.task('watchmockjs', function () {
-    gulp.watch("src/admin/js/**/*", ["buildmockjs"]);
+    gulp.watch("src/station/js/**/*", ["buildmockjs"]);
 });
 
 gulp.task('buildall', ['copy', 'buildlib', 'buildjs', 'compass'], function () {
