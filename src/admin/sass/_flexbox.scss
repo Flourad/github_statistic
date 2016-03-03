@@ -1,0 +1,21 @@
+@import "compass/css3";
+@import "compass/css3/box";
+
+.dis-box {
+    @include display-box();
+}
+.box-horizontal {
+     @include box-orient(horizontal);
+}
+.box-vertical {
+    @include box-orient(vertical);
+}
+.flex {
+    @include box-flex(1);
+}
+.pack-center {
+    @include box-pack(center);
+}
+.align-center {
+    @include box-align(center);
+}

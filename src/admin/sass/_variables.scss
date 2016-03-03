@@ -1,0 +1,27 @@
+$palette-grey:
+"250,250,250"
+"245,245,245"
+"238,238,238"
+"224,224,224"
+"189,189,189"
+"158,158,158"
+"117,117,117"
+"97,97,97"
+"66,66,66"
+"33,33,33";
+
+$palette-grey-50: nth($palette-grey, 1);
+$palette-grey-300: nth($palette-grey, 4);
+
+$layout-drawer-bg-color: unquote("rgb(#{$palette-grey-50})") !default;
+$layout-drawer-border-color: unquote("rgb(#{$palette-grey-300})") !default;
+
+/* SHADOWS */
+
+$shadow-key-umbra-opacity: 0.2 !default;
+$shadow-key-penumbra-opacity: 0.14 !default;
+$shadow-ambient-shadow-opacity: 0.12 !default;
+
+$tab-host-height: 56px;
+$gun-cell-margin: 5px;
+$gun-picker-height: 68%;
