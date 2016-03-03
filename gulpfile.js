@@ -41,20 +41,20 @@ var manifest = require('gulp-manifest');
 
 var root = './dist/';
 
-var dest = root + 'feak/';
+var dest = root + 'admin/';
 
 var connect = require("gulp-connect");
 var stripDebug = require('gulp-strip-debug');
 
 // Copy all files at the root level (app)
 gulp.task('copy', function () {
-    gulp.src([
-        'src/admin/page/**'
-    ], {
-        dot: true
-    }).pipe(gulp.dest(dest + "page")).pipe(plugins.size({
-        title: 'copy page'
-    }));
+    //gulp.src([
+    //    'src/admin/page/**'
+    //], {
+    //    dot: true
+    //}).pipe(gulp.dest(dest + "page")).pipe(plugins.size({
+    //    title: 'copy page'
+    //}));
 
     gulp.src([
         'src/admin/img/**'
@@ -136,7 +136,7 @@ gulp.task('buildlib', function () {
         .bundle()
         .pipe(source('lib.js'))
         .pipe(buffer())
-        .pipe(uglify())
+        ///.pipe(uglify())
         .pipe(gulp.dest(dest + 'static/js/'));
 });
 

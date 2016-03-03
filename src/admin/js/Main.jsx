@@ -1,21 +1,63 @@
-//var router = require('./route-adapter.js');
+/**
+ * Created by jinjiaxing on 16/3/3.
+ */
 
-//var Const = require('./Constant.js').Const;
-//var entranceStore = require('./GlobalStore.js').entranceStore;
-//var cityAction = require('./GlobalAction.js').cityAction;
-//var statisticConst = require('./StatisticConstant.js');
-//var CouponDetailPage = require('./PageCouponDetail.jsx');
+import { DatePicker, message,Table } from 'antd';
 
-var App = React.createClass({
+const {Component} = React;
 
-    componentDidMount: function () {
-        init();
-    },
+class App extends Component {
 
-    render:function(){
-        return (<h1>Hello</h1>);
+    constructor(props) {
+        super(props)
+        this.state = {
+            date:'',
+            dataSource:[{
+                key: '1',
+                name: '胡彦斌',
+                age: 32,
+                address: '西湖区湖底公园1号'
+            }, {
+                key: '2',
+                name: '胡彦祖',
+                age: 42,
+                address: '西湖区湖底公园1号'
+            }],
+            columns:[{
+                title: '姓名',
+                dataIndex: 'name',
+                key: 'name',
+            }, {
+                title: '年龄',
+                dataIndex: 'age',
+                key: 'age',
+            }, {
+                title: '住址',
+                dataIndex: 'address',
+                key: 'address',
+            }]
+        }
     }
-});
+
+
+
+    //static defaultProps = {}
+
+    componentDidMount(){
+        console.log('admin');
+    }
+
+    render(){
+        return(
+            <div>
+                <Table dataSource={this.state.dataSource} columns={this.state.columns} />
+                <button>请求</button>
+            </div>
+
+        )
+
+    }
+}
 
 
 
