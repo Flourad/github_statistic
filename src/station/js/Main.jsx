@@ -88,10 +88,5 @@ var App = React.createClass({
 });
 
 
-
-
-
-
-
-
-ReactDOM.render(<App />, document.getElementById('container'));
+export default App;
+//ReactDOM.render(<App />, document.getElementById('container'));
