@@ -37,8 +37,6 @@ var exec = require('child_process').exec;
 // 压缩
 var uglify = require('gulp-uglify');
 
-var manifest = require('gulp-manifest');
-
 var root = './dist/';
 
 var dest = root + 'station/';
@@ -57,7 +55,8 @@ gulp.task('copy', function () {
     //}));
 
     gulp.src([
-        'src/station/img/**'
+        'src/station/img/**',
+        'src/station/icon/**'
     ], {
         dot: true
     }).pipe(imagemin({
@@ -150,19 +149,19 @@ function getDirList(dir) {
 }
 String.prototype.endsWith = function (searchString, position) {
     var subjectString = this.toString();
-    if (typeof position !== 'number' || !isFinite(position) || Math.floor(position) !== position || position > subjectString.length) {
+    if (typeof position !== 'number'|| !isFinite(position)||Math.floor(position) !== position||position > subjectString.length) {
         position = subjectString.length;
     }
     position -= searchString.length;
     var lastIndex = subjectString.indexOf(searchString, position);
-    return lastIndex !== -1 && lastIndex === position;
+    return lastIndex !== -1&&lastIndex === position;
 };
 function getFileList(dir) {
     var dirs = getDirList(dir);
     var files = fs.readdirSync(dir)
         .filter(function (file) {
-            return fs.statSync(path.join(dir, file)).isFile() &&
-                (file.endsWith('.jsx') || file.endsWith('.js'));
+            return fs.statSync(path.join(dir, file)).isFile()&&
+                (file.endsWith('.jsx')||file.endsWith('.js'));
         }).map(function (key, value) {
             return path.join(dir, key);
         });
@@ -262,18 +261,6 @@ gulp.task('compass', function (cb) {
 
 });
 
-gulp.task('manifest', function () {
-    gulp.src(['./dist/**'], {base: './dist/'})
-        .pipe(manifest({
-            hash: true,
-            preferOnline: true,
-            network: ['*'],
-            filename: 'app.manifest',
-            exclude: ['app.manifest', 'index.html']
-        }))
-        .pipe(gulp.dest('dist'));
-});
-
 function accessLog(req, res, next) {
     console.log(req.method, req.url, 'HTTP/' + req.httpVersion, res.statusCode);
     next();
@@ -282,26 +269,12 @@ gulp.task('server', function () {
     connect.server({
         root: ["./dist"],
         port: 8080,
-        livereload: false,
-//        middleware: function (connect, opt) {
-//            var Proxy = require('gulp-connect-proxy');
-//            opt.route = '/proxy';
-//            var proxy = new Proxy(opt);
-////            return [accessLog, proxy];
-//
-//        }
+        livereload: false
     });
 
     gulp.watch("src/station/sass/*", ["compass"]);
-    //gulp.watch("./dist/**", function () {
-    //    console.log("dist change");
-    //    gulp.src('./dist/**')
-    //        .pipe(connect.reload());
-    //
-    //});
 
     require('./proxy.js');
-    console.log('~~~~~~~~~~~~~~~~build finish');
     // opn("http://localhost:8000");
 });
 
@@ -332,21 +305,3 @@ gulp.task('release', ['buildrelease', 'watchjs', 'server']);
 gulp.task('mock', ['copy', 'buildlib', 'buildmockjs', 'compass', 'watchmockjs', 'server'], function () {
 
 });
-
-// 无效任务包
-// var sourcemaps = require("gulp-sourcemaps");
-// var runSequence = require('run-sequence');
-// var pagespeed = require('psi');
-// var cacheify = require('cacheify');
-
-// 未使用的Task
-// gulp.task('jshint', function () {
-//    return gulp.src('app/scripts/**/*.js')
-//        .pipe(reload({
-//            stream: true,
-//            once: true
-//        }))
-//        .pipe($.jshint())
-//        .pipe($.jshint.reporter('jshint-stylish'))
-//        .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
-// });

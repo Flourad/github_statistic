@@ -47,6 +47,7 @@
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
     "react-iscroll": "0.1.5",
+    "react-router": "^2.0.0",
     "reflux": "^0.2.12",
     "require-dir": "^0.1.0",
     "run-sequence": "^1.0.1",
