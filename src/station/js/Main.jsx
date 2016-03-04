@@ -6,11 +6,36 @@ import { DatePicker, message,Table } from 'antd';
 
 const {Component} = React;
 
-class App extends Component {
+var App = React.createClass({
+    render: function () {
+        return(
+            <div>
+                <Table dataSource={this.state.dataSource} columns={this.state.columns} />
+                <button onClick={this.handleClick}>请求</button>
+            </div>
 
-    constructor(props) {
-        super(props)
-        this.state = {
+        );
+    },
+
+    setCookie:function(c_name, value, expiredays) {
+        var exdate = new Date();
+        exdate.setDate(exdate.getDate() + expiredays);
+        // important! domain is needed
+        var cookieVal = c_name + "=" + escape(value) +
+            ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString()) +
+            "; path=/; domain=" + location.hostname;
+        document.cookie = cookieVal;
+    },
+
+    componentDidMount:function(){
+        console.log('admin');
+        // todo 这个buuss 以后要从cookie取得
+        var bduss='GtsZn5sNWhPR2J5V0JDREJDZnRMSUZOS0hNRmtoS3l5YndKZ3A1YlRkMUZMdjlXQVFBQUFBJCQAAAAAAAAAAAEAAABoeEIGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEWh11ZFoddWU';
+        this.setCookie('BDUSS', bduss === undefined ? '' : bduss);
+    },
+
+    getInitialState: function () {
+        return {
             date:'',
             dataSource:[{
                 key: '1',
@@ -39,40 +64,20 @@ class App extends Component {
                 title: 'userid',
                 dataIndex: 'userid',
                 key: 'userid',
-                }]
-        }
-    }
+            }]
 
-    setCookie(c_name, value, expiredays) {
-        var exdate = new Date();
-        exdate.setDate(exdate.getDate() + expiredays);
-        // important! domain is needed
-        var cookieVal = c_name + "=" + escape(value) +
-            ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString()) +
-            "; path=/; domain=" + location.hostname;
-        document.cookie = cookieVal;
-    }
+        };
+    },
 
-    //static defaultProps = {}
-
-    componentDidMount(){
-        console.log('admin');
-        // todo 这个buuss 以后要从cookie取得
-        var bduss='GtsZn5sNWhPR2J5V0JDREJDZnRMSUZOS0hNRmtoS3l5YndKZ3A1YlRkMUZMdjlXQVFBQUFBJCQAAAAAAAAAAAEAAABoeEIGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEWh11ZFoddWU';
-        this.setCookie('BDUSS', bduss === undefined ? '' : bduss);
-    }
-
-    handleClick(){
+    handleClick:function(){
         var me=this;
         $.ajax({
             type: 'get',
-
-            url: '/admin/Operator/list',
-
-            data: '' ,
+            data:'',
+            url: '/admin/Operator/listget',
             dataType:'json',
-
             success: function(data){
+                console.log('+++++++++++++++++');
                console.log(data);
                 me.setState({dataSource:data.data.items});
             }
@@ -80,18 +85,8 @@ class App extends Component {
 
         });
     }
+});
 
-    render(){
-        return(
-            <div>
-                <Table dataSource={this.state.dataSource} columns={this.state.columns} />
-                <button onClick={this.handleClick.bind(this)}>请求</button>
-            </div>
-
-        )
-
-    }
-}
 
 
 

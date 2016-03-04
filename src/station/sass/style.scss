@@ -1,4 +1,51 @@
 @import 'antd';
+@import 'layout';
+@import "reset";
+
+body {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+}
+
+.header{
+  height: 60px;
+  min-height: 60px;
+  background-color: #e84948;
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+}
+
+.container{
+  position: relative;
+  background: #f3f3f3;
+  height:100%;
+  overflow: auto;
+  left: 188px;
+  top: 60px;
+}
+
+.silderbar{
+  position: fixed;
+  top: 51px;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: block;
+  padding: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #313541;
+  border-right: 1px solid #eee;
+  width:188px;
+}
+
+.footer{
+
+}
 
 
 
