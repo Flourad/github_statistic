@@ -12,11 +12,15 @@ class Header extends React.Component {
     }
 
     render() {
-
         return (
             <div>
-                This is Header
-                <div style={{width:'20px',height:'20px'}} className="icon-user"></div>
+                <div className="logoContainer">
+                    <div className="logo icon-baidulogo"></div>
+                    <label> | 商户管理中心</label>
+                </div>
+                <div className="userInfo">
+                    userInfo
+                </div>
             </div>
         );
     }
