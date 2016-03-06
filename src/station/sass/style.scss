@@ -3,8 +3,9 @@
 @import "reset";
 @import "icon";
 @import 'antd';
+@import 'headerMenu';
 body {
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   font-size: 14px;
   line-height: 1.42857143;
   color: #333;
@@ -13,7 +14,7 @@ body {
 .header{
   height: 60px;
   min-height: 60px;
-  background-color: #e84948;
+  background-color: #fe504f;
   position: fixed;
   right: 0;
   left: 0;

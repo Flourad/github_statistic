@@ -132,10 +132,11 @@ gulp.task('buildlib', function () {
     return browserify({
         entries: ['src/station/lib/lib.js']
     })
+        .transform(babelify)
         .bundle()
         .pipe(source('lib.js'))
         .pipe(buffer())
-        ///.pipe(uglify())
+        .pipe(uglify())
         .pipe(gulp.dest(dest + 'static/js/'));
 });
 
