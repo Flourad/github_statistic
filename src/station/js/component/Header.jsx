@@ -28,6 +28,8 @@ class Header extends React.Component {
     }
 }
 
-ReactDOM.render(<Header />, document.getElementById('header'));
+//ReactDOM.render(<Header />, document.getElementById('header'));
+
+export default Header;
 
 

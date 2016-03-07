@@ -1,6 +1,18 @@
 #silderBarComponent{
 
-  width:100%;
+  //width:100%;
+  position: fixed;
+  top: 60px;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: block;
+  padding: 0px 0px 0px 0px;
+  overflow-x: hidden;
+  //overflow-y: auto;
+  background-color: #313541;
+  border-right: 1px solid #eee;
+  width: 188px;
 
   a {
     color: #FFFFFF;

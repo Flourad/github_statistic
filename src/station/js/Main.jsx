@@ -2,16 +2,21 @@
  * Created by jinjiaxing on 16/3/3.
  */
 
-
+import SilderBar from './component/SilderBar.jsx';
+import Header from './component/Header.jsx';
 let {Table} = AntD;
+let { Link } = ReactRouter;
 
 var App = React.createClass({
 
     render: function () {
         return(
             <div>
-                <Table dataSource={this.state.dataSource} columns={this.state.columns} />
-                <button onClick={this.handleClick}>请求</button>
+                <Header />
+                <SilderBar id = "silderbar" />
+                <div id = "oilContent" style={{ padding: 20 }}>
+                    {this.props.children}
+                </div>
             </div>
 
         );

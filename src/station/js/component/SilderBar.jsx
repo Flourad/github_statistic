@@ -4,6 +4,7 @@
  */
 let {Menu} = AntD;
 let { SubMenu } = Menu;
+let { Link } = ReactRouter;
 
 class SilderBar extends React.Component {
     constructor(props) {
@@ -29,18 +30,18 @@ class SilderBar extends React.Component {
                     <Menu mode="vertical" theme="dark">
                         <SubMenu
                             title={
-                        <a href='/#/a'>
+                        <Link to='transaction'>
                             <i className="iconImage icon-trselect"></i>
                             <label className='usertext'>{this.constText.trSelect}</label>
-                        </a>}>
+                        </Link>}>
                         </SubMenu>
 
                         <SubMenu
                             title={
-                        <a href='/#/b'>
+                        <Link to='/#/b'>
                             <i className="iconImage icon-trclassselect"></i>
                             <label className='usertext'>{this.constText.trClassSelect}</label>
-                        </a>}>
+                        </Link>}>
                         </SubMenu>
                     </Menu>
                 </div>
@@ -50,18 +51,18 @@ class SilderBar extends React.Component {
                     <Menu mode="vertical" theme="dark">
                         <SubMenu
                             title={
-                        <a href='/#/c'>
+                        <Link to='/#/c'>
                             <i className="iconImage icon-opexpand"></i>
                             <label className='usertext'>{this.constText.opExpand}</label>
-                        </a>}>
+                        </Link>}>
                         </SubMenu>
 
                         <SubMenu
                             title={
-                        <a href='/#/d'>
+                        <Link to='/#/d'>
                             <i className="iconImage icon-opnearbyuser"></i>
                             <label className='usertext'>{this.constText.opNearByUser}</label>
-                        </a>}>
+                        </Link>}>
                         </SubMenu>
                     </Menu>
                 </div>
@@ -71,10 +72,10 @@ class SilderBar extends React.Component {
                     <Menu mode="vertical" theme="dark">
                         <SubMenu
                             title={
-                        <a href='/#/e'>
+                        <Link to='/#/e'>
                             <i className="iconImage icon-accessmanagement"></i>
                             <label className='usertext'>{this.constText.accessManagement}</label>
-                        </a>}>
+                        </Link>}>
                         </SubMenu>
 
                     </Menu>
@@ -87,4 +88,5 @@ class SilderBar extends React.Component {
 
 SilderBar.defaultProps = {};
 
-ReactDOM.render(<SilderBar />, document.getElementById('silderbar'));
+//ReactDOM.render(<SilderBar />, document.getElementById('silderbar'));
+export default SilderBar;
