@@ -5,10 +5,10 @@
 import App from './Main.jsx';
 import Transaction from './page/PageTransaction.jsx';
 
-let {Router,Route,browserHistory,IndexRoute } =ReactRouter;
+let {Router,Route,hashHistory,IndexRoute } =ReactRouter;
 
 ReactDOM.render(
-    <Router history={browserHistory}>
+    <Router history={hashHistory}>
         <Route path='/' component={App}>
             <Route path='transaction' component={Transaction}/>
         </Route>
