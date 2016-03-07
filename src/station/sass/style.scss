@@ -4,6 +4,7 @@
 @import "icon";
 @import 'antd';
 @import 'headerMenu';
+@import 'silderBar';
 body {
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   font-size: 14px;
@@ -32,17 +33,17 @@ body {
 
 .silderbar{
   position: fixed;
-  top: 51px;
+  top: 60px;
   bottom: 0;
   left: 0;
   z-index: 1000;
   display: block;
-  padding: 20px;
+  padding: 0px 0px 0px 0px;
   overflow-x: hidden;
   overflow-y: auto;
   background-color: #313541;
   border-right: 1px solid #eee;
-  width:188px;
+  width: 188px;
 }
 
 .footer{
