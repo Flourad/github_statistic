@@ -72,7 +72,7 @@ class SilderBar extends React.Component {
                     <Menu mode="vertical" theme="dark">
                         <SubMenu
                             title={
-                        <Link to='/#/e'>
+                        <Link to='pagepermission'>
                             <i className="iconImage icon-accessmanagement"></i>
                             <label className='usertext'>{this.constText.accessManagement}</label>
                         </Link>}>

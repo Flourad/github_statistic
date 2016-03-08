@@ -4,8 +4,6 @@
 
 import SilderBar from './component/SilderBar.jsx';
 import Header from './component/Header.jsx';
-let {Table} = AntD;
-let { Link } = ReactRouter;
 
 var App = React.createClass({
 
@@ -39,40 +37,6 @@ var App = React.createClass({
         this.setCookie('BDUSS', bduss === undefined ? '' : bduss);
     },
 
-    getInitialState: function () {
-        return {
-            date:'',
-            dataSource:[{
-                key: '1',
-                name: '胡彦斌',
-                age: 32,
-                address: '西湖区湖底公园1号'
-            }, {
-                key: '2',
-                name: '胡彦祖',
-                age: 42,
-                address: '西湖区湖底公园1号'
-            }],
-            columns:[{
-                title: 'ID',
-                dataIndex: 'id',
-                key: 'id',
-            }, {
-                title: 'name',
-                dataIndex: 'name',
-                key: 'name',
-            }, {
-                title: 'station_id',
-                dataIndex: 'station_id',
-                key: 'station_id',
-            },{
-                title: 'userid',
-                dataIndex: 'userid',
-                key: 'userid',
-            }]
-
-        };
-    },
 
     handleClick:function(){
         var me=this;
