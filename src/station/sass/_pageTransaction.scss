@@ -1,0 +1,101 @@
+#pageTransaction {
+
+  // 重写antd中的样式
+  .ant-pagination-item-active {
+    background-color: #5a5d67;
+    border-color: #5a5d67;
+  }
+  .ant-table-pagination {
+    margin: 10px 0;
+  }
+
+  .ant-btn-primary {
+    color: #fff;
+    background-color: #fe504f;
+    border-color: #fe504f;
+
+  }
+  .ant-btn:hover, .ant-btn:focus {
+    background-color: #e84948;
+  }
+
+  $background-color: #ffffff;
+
+  .sec1-query {
+    padding-left: 22px;
+    background-color: $background-color;
+
+    .queryHeader {
+      position: relative;
+      height: 68px;
+      font-size: 28px;
+      padding: 10px 0;
+
+      &:after {
+        content: " ";
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        border-top: 1px solid #eaeaea;
+        left: 0;
+        bottom: 0;
+      }
+    }
+    .queryContent {
+      padding-bottom: 30px;
+
+      .table-query {
+        td {
+          padding-right: 20px;
+        }
+        .table-query-header {
+          padding-top: 22px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  .sec2-statistic {
+    height: 114px;
+    text-align: center;
+    margin: 22px 22px 0 22px;
+    border: 1px solid #D9D9D9;
+    background-color: $background-color;
+
+    table {
+      width: 100%;
+      height: 100%;
+    }
+    .sec2-text {
+      font-size: 14px;
+    }
+    .sec2-num {
+      font-size: 28px;
+      color: #333333;
+    }
+  }
+
+  .sec3-table {
+    position: relative;
+    margin: 22px;
+    background-color: $background-color;
+
+    .clearfix {
+      zoom: 1;
+      border: 1px solid #d9d9d9;
+      background-color: white;
+    }
+    .ant-table {
+      font-size: 14px;
+    }
+    .total_records {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      font-size: 15px;
+      color: #999999;
+    }
+  }
+
+}
