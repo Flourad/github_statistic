@@ -1,5 +1,42 @@
-#PagePermission{
-  .pagePermission_Header{
+@import  "compass/css3";
+#pagePermission {
+  height: 100%;
+  .pagePermission_Header {
+    height: 72px;
+    background-color: white;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    padding-left: 28px;
+    padding-right: 16px;
 
+    .headtext {
+      display: inline-block;
+    }
+
+    .headButton {
+      height: 36px;
+      float: right;
+    }
+
+    .ant-btn-primary{
+      color: #fff;
+      background-color: #fe504f;
+      border-color: #fe504f;
+
+    }
+    .ant-btn:hover, .ant-btn:focus{
+      background-color: #e84948;
+    }
+  }
+
+  .pagePermission_Table {
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-right: 17px;
+
+    .clearfix{
+      zoom: 1;
+      border: 1px solid black;
+    }
   }
 }
