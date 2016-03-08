@@ -11,12 +11,14 @@ class PagePermission extends React.Component {
 
     render(){
         return(
-            <div id="PageTransaction">
-                <div class="pageTransaction_Header">
+            <div id="PagePermission">
+                <div className="pagePermission_Header">
                     <h1>权限管理</h1>
                     <button> 新增人员 </button>
                 </div>
-
+                <div className="pagePermission_Table">
+                    12121
+                </div>
             </div>
         );
     }

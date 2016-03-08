@@ -5,11 +5,11 @@
 @import 'antd';
 @import 'headerMenu';
 @import 'silderBar';
-body {
+html, body {
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
   font-size: 14px;
-  line-height: 1.42857143;
   color: #333;
+  height: 100%;
 }
 
 .container {
@@ -18,12 +18,11 @@ body {
 }
 
 #oilContent{
-  position: relative;
   background: #f3f3f3;
   overflow: auto;
-  left: 188px;
-  top: 60px;
-  width: calc(100% - 188px);
+  height: 100%;
+  padding-top: 60px;
+  padding-left: 188px;
 }
 
 

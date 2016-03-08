@@ -9,10 +9,10 @@ var App = React.createClass({
 
     render: function () {
         return(
-            <div>
+            <div style={{height:'100%'}}>
                 <Header />
                 <SilderBar id = "silderbar" />
-                <div id = "oilContent" style={{ padding: 20 }}>
+                <div id = "oilContent">
                     {this.props.children}
                 </div>
             </div>
