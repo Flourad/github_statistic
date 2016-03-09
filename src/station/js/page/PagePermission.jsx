@@ -116,12 +116,20 @@ class PagePermission extends React.Component {
         //});
     }
 
+    /**
+     * 跳转到新增权限人员界面
+     */
+    toAdd(){
+        console.log(this.context.router);
+        this.context.router.push('/pageaddpermission');
+    }
+
     render() {
         return (
             <div id="pagePermission">
                 <div className="pagePermission_Header">
                     <h1 className="headtext">权限管理</h1>
-                    <Button className="headButton" type="primary" size="large">
+                    <Button onClick={this.toAdd.bind(this)} className="headButton" type="primary" size="large">
                         <Icon type="plus"/>
                         新增人员
                     </Button>
@@ -137,4 +145,8 @@ class PagePermission extends React.Component {
 }
 
 PagePermission.defaultProps = {};
+PagePermission.contextTypes = {
+    router: function() { return React.PropTypes.func.isRequired; }
+};
+
 export default PagePermission;
