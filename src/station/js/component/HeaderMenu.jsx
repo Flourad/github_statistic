@@ -38,6 +38,6 @@ class HeaderMenu extends React.Component {
     }
 }
 
-HeaderMenu.defaultProps = {userName: '139****5861'};
+HeaderMenu.defaultProps = {userName: '尚未登录'};
 
 export default HeaderMenu;

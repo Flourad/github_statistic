@@ -11,6 +11,7 @@ let {Router,Route,hashHistory,IndexRoute } =ReactRouter;
 ReactDOM.render(
     <Router history={hashHistory}>
         <Route path='/' component={App}>
+            <IndexRoute component={Transaction}/>
             <Route path='transaction' component={Transaction}/>
             <Route path='pagepermission' component={Pagepermission}/>
         </Route>

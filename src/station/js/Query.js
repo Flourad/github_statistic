@@ -6,8 +6,7 @@
 
 class Query {
     constructor() {
-        this.statusNoLogin = 1001;
-        this.statusNoPermission = 1005;
+
     }
 }
 
@@ -43,7 +42,8 @@ Query.post = function (url, data, callBack) {
  */
 Query.req = function (type, url, data, callBack) {
     console.debug('get: url=' + url + ' data=' + data);
-    var self = this;
+    const statusNoLogin = 1001;
+    const statusNoPermission = 1005;
     $.ajax({
         type: type,
         data: data,
@@ -52,10 +52,10 @@ Query.req = function (type, url, data, callBack) {
         success: function (data) {
             if (data && data.errno === 0 && data.errstr === 'ok') {
                 callBack(data);
-            } else if (data.errno === self.statusNoLogin) {
+            } else if (data.errno === statusNoLogin) {
                 console.info('用户尚未登录');
                 window.location.href = 'https://passport.rdtest.baidu.com/v2/?login&tpl=map_car&u=' + window.location.host;
-            } else if (data.errno === self.statusNoPermission) {
+            } else if (data.errno === statusNoPermission) {
                 alert('没有访问权限,请重新登录');
                 window.location.href ='https://passport.rdtest.baidu.com/v2/?login&tpl=map_car&u=' + window.location.host;
             }

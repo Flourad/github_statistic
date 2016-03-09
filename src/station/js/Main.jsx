@@ -10,18 +10,30 @@ import CommonData from './common/CommonData.js';
 
 class App extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            user_name: '',
+            stations: []
+        };
+    }
+
     componentWillMount() {
         // 获取站长信息
+
         Query.get(oilConst.reqAccountInfo, '', function (data) {
+            CommonData.loginData = data;
             console.log(CommonData.loginData);
-            console.log(data);
-        });
+
+            this.setState({'user_name': data.data.user_name});
+
+        }.bind(this));
     }
 
     render() {
         return (
             <div style={{height:'100%'}}>
-                <Header />
+                <Header userName={this.state.user_name}/>
                 <SilderBar id="silderbar"/>
                 <div id="oilContent">
                     {this.props.children}

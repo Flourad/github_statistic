@@ -7,6 +7,7 @@ import HeaderMenu from './HeaderMenu.jsx';
 class Header extends React.Component {
     constructor(props){
         super(props);
+
         this.state = {
 
         }
@@ -21,14 +22,14 @@ class Header extends React.Component {
                     <label> | 商户管理中心</label>
                 </div>
                 <div className="userInfo">
-                    <HeaderMenu />
+                    <HeaderMenu userName={this.props.userName} />
                 </div>
             </div>
         )
     }
 }
 
-//ReactDOM.render(<Header />, document.getElementById('header'));
+
 
 export default Header;
 
