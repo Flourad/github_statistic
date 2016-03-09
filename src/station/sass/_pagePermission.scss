@@ -30,6 +30,10 @@
     }
   }
 
+
+
+
+
   .pagePermission_Table {
     padding-left: 20px;
     padding-top: 20px;
@@ -56,6 +60,13 @@
       left: 13px;
       font-size: 14px;
     }
+
+    .ant-pagination-item-active{
+      background-color: #5a5d67;
+      border-color: #5a5d67;
+    }
+
+
 
   }
 }

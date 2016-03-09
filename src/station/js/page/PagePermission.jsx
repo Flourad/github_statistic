@@ -22,20 +22,48 @@ class PagePermission extends React.Component {
             name: '李大嘴',
             phone: '13914015782',
             address: '沈阳西湖区湖底公园3号'
+        }, {
+            key: '4',
+            name: '胡彦祖',
+            phone: '13905015882',
+            address: '天津西湖区湖底公园2号'
+        }, {
+            key: '5',
+            name: '胡彦祖',
+            phone: '13905015882',
+            address: '天津西湖区湖底公园2号'
+        }, {
+            key: '6',
+            name: '胡彦祖',
+            phone: '13905015882',
+            address: '天津西湖区湖底公园2号'
+        }, {
+            key: '7',
+            name: '胡彦祖',
+            phone: '13905015882',
+            address: '天津西湖区湖底公园2号'
+        }, {
+            key: '9',
+            name: '胡彦祖',
+            phone: '13905015882',
+            address: '天津西湖区湖底公园2号'
+        }, {
+            key: '8',
+            name: '胡彦祖',
+            phone: '13905015882',
+            address: '天津西湖区湖底公园2号'
         }];
 
         this.state = {
             dataSource: this.data
         };
 
+        var me=this;
         this.columns = [
             {
                 title: '姓名',
                 dataIndex: 'name',
                 key: 'name',
-                render(text) {
-                    return <a href="#">{text}</a>;
-                }
             }, {
                 title: '手机号',
                 dataIndex: 'phone',
@@ -50,13 +78,23 @@ class PagePermission extends React.Component {
                 render(text, record) {
                     return (
                         <div>
-                            <button className="columnButton">编辑</button>
-                            <button className="columnButton">删除</button>
+                            <button className="columnButton" onClick={me.editHandler.bind(me,text, record)}>编辑</button>
+                            <button className="columnButton" onClick={me.editHandler.bind(me,text, record)}>删除</button>
                         </div>
                     );
                 }
             }];
     }
+
+    editHandler(text, record){
+        console.log(record);
+    }
+
+    delHandler(text, record){
+        console.log(record);
+    }
+
+
 
     componentDidMount() {
 
@@ -89,8 +127,9 @@ class PagePermission extends React.Component {
                     </Button>
                 </div>
                 <div className="pagePermission_Table">
-                    <Table columns={this.columns} dataSource={this.state.dataSource}/>
-                    <label className="dataTotal">共 3 条记录</label>
+                    <Table columns={this.columns} dataSource={this.state.dataSource}
+                           pagination={{ pageSize: 10 }} useFixedHeader/>
+                    <label className="dataTotal">共 <i style={{color:"red"}}>3</i> 条记录</label>
                 </div>
             </div>
         );
