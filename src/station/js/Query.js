@@ -17,8 +17,8 @@ class Query {
  * @param {Object} data 请求参数
  * @param {Function} callBack 回调函数
  */
-Query.get = function (url, data, callBack) {
-    Query.req('get', url, data, callBack);
+Query.get = function (url, data, callBack, onErrorResponse) {
+    Query.req('get', url, data, callBack, onErrorResponse);
 };
 
 /**
@@ -28,8 +28,8 @@ Query.get = function (url, data, callBack) {
  * @param {Object} data 请求参数
  * @param {Function} callBack 回调函数
  */
-Query.post = function (url, data, callBack) {
-    Query.req('post', url, data, callBack);
+Query.post = function (url, data, callBack, onErrorResponse) {
+    Query.req('post', url, data, callBack, onErrorResponse);
 };
 
 /**
@@ -40,7 +40,7 @@ Query.post = function (url, data, callBack) {
  * @param {Object} data 请求参数
  * @param {Function} callBack 回调函数
  */
-Query.req = function (type, url, data, callBack) {
+Query.req = function (type, url, data, callBack, onErrorResponse) {
     console.debug('get: url=' + url + ' data=' + JSON.stringify(data));
     const statusNoLogin = 1001;
     const statusNoPermission = 1005;
@@ -58,6 +58,8 @@ Query.req = function (type, url, data, callBack) {
             } else if (data.errno === statusNoPermission) {
                 alert('没有访问权限,请重新登录');
                 window.location.href ='https://passport.rdtest.baidu.com/v2/?login&tpl=map_car&u=' + window.location.host;
+            } else {
+                onErrorResponse(data);
             }
         },
         error: function (e) {
