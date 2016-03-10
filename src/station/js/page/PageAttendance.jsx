@@ -2,6 +2,8 @@ const {Table, Select, DatePicker, Button, Icon} = AntD;
 const {Option} = Select;
 import Query from '../Query.js';
 import CommonData from '../common/CommonData.js';
+import actionQueryAttendance from '../actions/AttendanceAction.jsx';
+import storeQueryAttendance from '../stores/AttendanceStore.jsx';
 
 const columns = [
     {
@@ -71,13 +73,38 @@ class AttendanceStats extends React.Component {
         this.handleTableChange = this.handleTableChange.bind(this);
         this.fetch = this.fetch.bind(this);
         this.parseData = this.parseData.bind(this);
+
+        this.onConditionUpdate = this.onConditionUpdate.bind(this);
+        storeQueryAttendance.listen(this.onConditionUpdate);
+    }
+
+    onConditionUpdate(condition) {
+        console.log('update: ' + JSON.stringify(condition));
+
+        const pager = this.state.pagination;
+        pager.current = 1;
+        pager.size = 10;
+
+        this.setState({
+            pagination: pager
+        });
+
+        const params = {
+            size: pager.size,
+            page: pager.current,
+            station_id: condition.stationId,
+            start_date: condition.startTime,
+            end_date: condition.endTime
+        };
+
+        this.fetch(params);
     }
 
     showTotal(total) {
         return '共'+total+'条';
     }
 
-    handleTableChange(pagination, filters, sorter) {
+    handleTableChange(pagination) {
         const pager = this.state.pagination;
         pager.current = pagination.current;
         pager.size = 10;
@@ -89,9 +116,9 @@ class AttendanceStats extends React.Component {
         const params = {
             size: pagination.pageSize,
             page: pagination.current,
-            station_id: this.props.station,
-            start_date: this.props.startTime,
-            end_date: this.props.endTime
+            station_id: storeQueryAttendance.condition.stationId,
+            start_date: storeQueryAttendance.condition.startTime,
+            end_date: storeQueryAttendance.condition.startTime
         };
 
         this.fetch(params);
@@ -115,9 +142,9 @@ class AttendanceStats extends React.Component {
 
     componentDidMount() {
         const params = {
-            station_id: this.props.station,
-            start_date: this.props.startTime,
-            end_date: this.props.endTime
+            station_id: storeQueryAttendance.condition.stationId,
+            start_date: storeQueryAttendance.condition.startTime,
+            end_date: storeQueryAttendance.condition.endTime
         };
         this.fetch(params);
     }
@@ -144,25 +171,14 @@ class Attendance extends React.Component {
             startTime: '',
             endTime: ''
         };
-
-        this.handleQuery = this.handleQuery.bind(this);
-    }
-
-    handleQuery(station, startTime, endTime){
-        console.log('station: ' + station + ', startTime: ' + startTime + ', endTime: ' + endTime);
-        this.setState({
-            station: station,
-            startTime: startTime,
-            endTime: endTime
-        });
     }
 
     render() {
         return (
             <div>
                 <p>班次查询</p>
-                <AttendanceSelect data={CommonData.loginData.data.stations} onQuery={this.handleQuery}/>
-                <AttendanceStats station={this.state.station} startTime={this.state.startTime} endTime={this.state.endTime}/> 
+                <AttendanceSelect data={CommonData.loginData.data.stations}/>
+                <AttendanceStats/>
             </div>
         );
     }
@@ -191,11 +207,11 @@ class AttendanceSelect extends React.Component {
     }
 
     onStartTimeChange(time) {
-        this.startTime = time.toUTCString();
+        this.startTime = time ? time.toUTCString() : '';
     }
 
     onEndTimeChange(time) {
-        this.endTime = time.toUTCString();
+        this.endTime = time ? time.toUTCString() : '';
     }
 
     onStationChange(name) {
@@ -203,13 +219,15 @@ class AttendanceSelect extends React.Component {
     }
 
     onQuery() {
-        this.props.onQuery(this.station, this.startTime, this.endTime);
+        //this.props.onQuery(this.station, this.startTime, this.endTime);
+        let condition = {stationId: this.station, startTime: this.startTime, endTime: this.endTime};
+        actionQueryAttendance.conditionUpdate(condition);
     }
 
     render() {
         return (
             <div className="dis-box">
-                <Select style={{ width: 400 }} placeholder="请选择油站" onChange={this.onStationChange} defaultValue={this.props.data[0].name}>
+                <Select style={{ width: 400 }} placeholder="请选择油站" onChange={this.onStationChange}>
                     {this.children}
                 </Select>
                 <DatePicker onChange={this.onStartTimeChange} placeholder="开始日期" disabledDate={this.disabledDate}></DatePicker>
