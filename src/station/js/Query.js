@@ -40,8 +40,9 @@ Query.post = function (url, data, callBack, onErrorResponse) {
  * @param {Object} data 请求参数
  * @param {Function} callBack 回调函数
  */
+
 Query.req = function (type, url, data, callBack, onErrorResponse) {
-    console.debug('get: url=' + url + ' data=' + JSON.stringify(data));
+    console.debug('请求服务端' + type+': url=' + url + ' data=' + JSON.stringify(data));
     const statusNoLogin = 1001;
     const statusNoPermission = 1005;
     $.ajax({
@@ -50,6 +51,7 @@ Query.req = function (type, url, data, callBack, onErrorResponse) {
         url: url,
         dataType: 'json',
         success: function (data) {
+            console.debug('callback:' , data);
             if (data && data.errno === 0 && data.errstr === 'ok') {
                 callBack(data);
             } else if (data.errno === statusNoLogin) {
@@ -58,8 +60,10 @@ Query.req = function (type, url, data, callBack, onErrorResponse) {
             } else if (data.errno === statusNoPermission) {
                 alert('没有访问权限,请重新登录');
                 window.location.href ='https://passport.rdtest.baidu.com/v2/?login&tpl=map_car&u=' + window.location.host;
+
             } else {
                 onErrorResponse(data);
+                alert(data.errstr);
             }
         },
         error: function (e) {

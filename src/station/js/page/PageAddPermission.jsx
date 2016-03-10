@@ -4,6 +4,7 @@
  */
 
 import CommonData from '../common/CommonData';
+import Query from '../Query.js';
 
 let { Button , Select } =AntD;
 const Option = Select.Option;
@@ -15,7 +16,8 @@ class PageAddPermission extends React.Component {
         this.state = {
             actionName: '新增人员',
             userName: '',
-            phone: ''
+            phone: '',
+            stationId: ''
         };
         if (this.props.location.state) {
             var info = this.props.location.state;
@@ -40,34 +42,76 @@ class PageAddPermission extends React.Component {
 
     }
 
+    /**
+     * 取消操作
+     *
+     */
     cancelHandler() {
-        console.log('cancelHandler');
         var url = {pathname: '/pagepermission'};
         this.context.router.push(url);
     }
 
-    userNameChange() {
+    /**
+     * 保存操作
+     *
+     */
+    saveHandler() {
+        let info = this.props.location;
 
+        let name = this.state.userName;
+        let phone = this.state.phone;
+        let station = this.state.stationId;
+
+        // 编辑
+        if (info.status === 'edit') {
+
+        }
+        // 新增
+        else {
+            var reqData={name:name,phone:phone,station_id:station};
+            Query.post(oilConst.reqOperatorSave, reqData, function (data) {
+                console.debug('新加权限:',data);
+            }.bind(this));
+        }
     }
 
-    phoneChange() {
-
+    /**
+     * 姓名change
+     *
+     * @param e 操作对象
+     */
+    userNameChange(e) {
+        this.setState({userName: e.target.value});
     }
 
-    handleChange() {
+    /**
+     * 电话change
+     *
+     * @param e 操作对象
+     */
+    phoneChange(e) {
+        this.setState({phone: e.target.value});
+    }
 
+    /**
+     * 选择油站时触发
+     *
+     * @param value id值
+     * @param label 显示文字
+     */
+    stationChange(value, label) {
+        this.setState({stationId: value});
     }
 
     render() {
 
         let optionArray = [];
-        console.log(CommonData.loginData);
 
         if (CommonData.loginData.data) {
             let stationInfo = CommonData.loginData.data.stations;
             for (let i = 0; i < stationInfo.length; i++) {
-                console.log(stationInfo[i]);
-                let optionDom = (<Option key={stationInfo[i].station_id} value={stationInfo[i].station_id}>{stationInfo[i].name}</Option>);
+                let optionDom = (<Option key={stationInfo[i].station_id}
+                                         value={stationInfo[i].station_id}>{stationInfo[i].name}</Option>);
                 optionArray.push(optionDom);
             }
         }
@@ -81,14 +125,16 @@ class PageAddPermission extends React.Component {
                 <div className="pageAddPermission_Body">
                     <div className="pageAddPermission_container">
                         <label>姓名</label>
-                        <input onChange={this.userNameChange.bind(this)} type="text" value={this.state.userName}/>
+                        <input onChange={this.userNameChange.bind(this)} type="text" value={this.state.userName}></input>
                         <label>手机号</label>
                         <input onChange={this.phoneChange.bind(this)} type="text" value={this.state.phone}/>
                         <label>管辖油站</label>
-                        <Select defaultValue={this.state.stationId} style={{ width: 316 }} onChange={this.handleChange.bind(this)}>
+                        <Select ref='selStation' defaultValue={this.state.stationId} style={{ width: 316 }}
+                                onChange={this.stationChange.bind(this)}>
                             {optionArray}
                         </Select>
-                        <Button className="headButton" type="primary" size="large">
+                        <Button onClick={this.saveHandler.bind(this)} className="headButton" type="primary"
+                                size="large">
                             保存
                         </Button>
                         <Button onClick={this.cancelHandler.bind(this)} className="headButton" type="primary"

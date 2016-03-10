@@ -1,6 +1,6 @@
 /**
  * Created by jinjiaxing on 16/3/3.
- * @file
+ * @file Main
  */
 
 import SilderBar from './component/SilderBar.jsx';
@@ -54,25 +54,9 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        console.log('admin');
         // todo 这个buuss 以后要从cookie取得
         var bduss = 'VZqVVFiMEdMWWVSVWlTTDhORGNsand3aFVacDB0UlllNDZSNVhZd0duQ2xGd1pYQVFBQUFBJCQAAAAAAAAAAAEAAABoeEIGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKWK3lalit5WL';
-        //this.setCookie('BDUSS', bduss === undefined ? '' : bduss);
-    }
-
-    handleClick() {
-        var me = this;
-        $.ajax({
-            type: 'get',
-            data: '',
-            url: '/admin/Operator/listget',
-            dataType: 'json',
-            success: function (data) {
-                console.log('+++++++++++++++++');
-                console.log(data);
-                me.setState({dataSource: data.data.items});
-            }
-        });
+        this.setCookie('BDUSS', bduss === undefined ? '' : bduss);
     }
 }
 

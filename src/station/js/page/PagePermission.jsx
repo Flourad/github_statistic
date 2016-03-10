@@ -38,7 +38,7 @@ class PagePermission extends React.Component {
                     return (
                         <div>
                             <button className="columnButton" onClick={me.editHandler.bind(me,text, record)}>编辑</button>
-                            <button className="columnButton" onClick={me.editHandler.bind(me,text, record)}>删除</button>
+                            <button className="columnButton" onClick={me.delHandler.bind(me,text, record)}>删除</button>
                         </div>
                     );
                 }
@@ -49,9 +49,13 @@ class PagePermission extends React.Component {
 
         // 取得操作员列表信息
         Query.get(oilConst.reqOperatorList, '', function (data) {
-            console.log('取得操作员列表信息:',data.data.items);
-            this.setState({dataSource:data.data.items});
-            this.setState({total:data.data.page.total});
+            if(data && data.data && data.data.items){
+                console.log('取得操作员列表信息:',data.data.items);
+                this.setState({dataSource:data.data.items});
+                this.setState({total:data.data.page.total});
+            }else{
+                console.log('取得操作员列表为空');
+            }
 
         }.bind(this));
     }
@@ -78,7 +82,7 @@ class PagePermission extends React.Component {
      * @param record 每行数据对象
      */
     editHandler(text, record){
-        console.log('编辑:',record);
+        console.debug('编辑:',record);
         // 带参数
         var data={status:'edit',data:record};
         var url={pathname:'/pageaddpermission',state:{data}};
@@ -92,7 +96,13 @@ class PagePermission extends React.Component {
      * @param record 每行数据对象
      */
     delHandler(text, record){
-        console.log(record);
+        console.debug('删除:',record);
+
+        var reqData={id:record.id,station_id:record.station_id};
+        Query.post(oilConst.reqOperateDelete, reqData, function (data) {
+            console.log('删除成功');
+            this.forceUpdate();
+        }.bind(this));
     }
 
     /**
