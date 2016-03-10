@@ -2,25 +2,75 @@
  * @file 新增/修改 权限
  * Created by jinjiaxing on 16/3/9.
  */
-let { Button } =AntD;
+
+import CommonData from '../common/CommonData';
+
+let { Button , Select } =AntD;
+const Option = Select.Option;
 
 class PageAddPermission extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            action:'add',
-            actionName:'新增人员'
+            actionName: '新增人员',
+            userName: '',
+            phone: ''
         };
-        if(this.props.location.state){
-            console.debug(this.props.location.state);
+        if (this.props.location.state) {
+            var info = this.props.location.state;
+            console.debug("新增/编辑 人员:", info);
+            if (info.data.status === 'edit') {
+                this.state.actionName = "编辑人员";
+                // 姓名
+                if (info.data.data.name) {
+                    this.state.userName = info.data.data.name;
+                }
+                // 手机号
+                if (info.data.data.phone) {
+                    this.state.phone = info.data.data.phone;
+                }
+                // 油站
+                if (info.data.data.station_id) {
+                    this.state.stationId = info.data.data.station_id;
+                }
+
+            }
         }
 
     }
 
-    render(){
-        // 取出路由传递的参数
-        //console.log(this.props.location.state);
+    cancelHandler() {
+        console.log('cancelHandler');
+        var url = {pathname: '/pagepermission'};
+        this.context.router.push(url);
+    }
+
+    userNameChange() {
+
+    }
+
+    phoneChange() {
+
+    }
+
+    handleChange() {
+
+    }
+
+    render() {
+
+        let optionArray = [];
+        console.log(CommonData.loginData);
+
+        if (CommonData.loginData.data) {
+            let stationInfo = CommonData.loginData.data.stations;
+            for (let i = 0; i < stationInfo.length; i++) {
+                console.log(stationInfo[i]);
+                let optionDom = (<Option key={stationInfo[i].station_id} value={stationInfo[i].station_id}>{stationInfo[i].name}</Option>);
+                optionArray.push(optionDom);
+            }
+        }
 
         return (
             <div id='pageAddPermission'>
@@ -31,15 +81,18 @@ class PageAddPermission extends React.Component {
                 <div className="pageAddPermission_Body">
                     <div className="pageAddPermission_container">
                         <label>姓名</label>
-                        <input type="text"/>
+                        <input onChange={this.userNameChange.bind(this)} type="text" value={this.state.userName}/>
                         <label>手机号</label>
-                        <input type="text"/>
+                        <input onChange={this.phoneChange.bind(this)} type="text" value={this.state.phone}/>
                         <label>管辖油站</label>
-                        <input type="text"/>
-                        <Button  className="headButton" type="primary" size="large">
+                        <Select defaultValue={this.state.stationId} style={{ width: 316 }} onChange={this.handleChange.bind(this)}>
+                            {optionArray}
+                        </Select>
+                        <Button className="headButton" type="primary" size="large">
                             保存
                         </Button>
-                        <Button  className="headButton" type="primary" size="large">
+                        <Button onClick={this.cancelHandler.bind(this)} className="headButton" type="primary"
+                                size="large">
                             取消
                         </Button>
                     </div>
@@ -49,5 +102,10 @@ class PageAddPermission extends React.Component {
         );
     }
 }
+PageAddPermission.contextTypes = {
+    router: function () {
+        return React.PropTypes.func.isRequired;
+    }
+};
 
 export default PageAddPermission;
