@@ -14,4 +14,6 @@ oilConst.reqOperatorSave = '/admin/operator/save';
 // 权限管理-删除操作员
 oilConst.reqOperateDelete = '/admin/operator/delete';
 
+oilConst.reqAttendance = '/admin/Shift/query';
+
 window.oilConst = oilConst;

@@ -23,7 +23,7 @@ class App extends React.Component {
 
         Query.get(oilConst.reqAccountInfo, '', function (data) {
             CommonData.loginData = data;
-            console.log(CommonData.loginData);
+            console.log('user info: ' + JSON.stringify(CommonData.loginData));
 
             this.setState({'user_name': data.data.user_name});
 
@@ -57,7 +57,7 @@ class App extends React.Component {
         console.log('admin');
         // todo 这个buuss 以后要从cookie取得
         var bduss = 'VZqVVFiMEdMWWVSVWlTTDhORGNsand3aFVacDB0UlllNDZSNVhZd0duQ2xGd1pYQVFBQUFBJCQAAAAAAAAAAAEAAABoeEIGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKWK3lalit5WL';
-        this.setCookie('BDUSS', bduss === undefined ? '' : bduss);
+        //this.setCookie('BDUSS', bduss === undefined ? '' : bduss);
     }
 
     handleClick() {

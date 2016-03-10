@@ -41,7 +41,7 @@ Query.post = function (url, data, callBack) {
  * @param {Function} callBack 回调函数
  */
 Query.req = function (type, url, data, callBack) {
-    console.debug('get: url=' + url + ' data=' + data);
+    console.debug('get: url=' + url + ' data=' + JSON.stringify(data));
     const statusNoLogin = 1001;
     const statusNoPermission = 1005;
     $.ajax({
