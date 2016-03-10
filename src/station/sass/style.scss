@@ -29,6 +29,17 @@ html, body {
   padding-left: 188px;
 }
 
+.ant-btn-primary {
+  color: #fff;
+  background-color: #fe504f;
+  border-color: #fe504f;
+
+}
+.ant-btn:hover, .ant-btn:focus {
+  background-color: #e84948;
+  border-color: #fe504f;
+}
+
 
 
 

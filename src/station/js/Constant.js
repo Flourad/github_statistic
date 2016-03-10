@@ -8,7 +8,7 @@ var oilConst = {};
 // 获取站长信息
 oilConst.reqAccountInfo = '/admin/account/info';
 // 权限管理-操作员列表
-oilConst.reqOperatorList = '/admin/operator/list';
+oilConst.reqOperatorList = '/admin/Operator/list';
 // 权限管理-添加操作员
 oilConst.reqOperatorSave = '/admin/operator/save';
 // 权限管理-删除操作员

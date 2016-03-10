@@ -1,61 +1,17 @@
 /**
  * Created by jinjiaxing on 16/3/4.
  */
+
+import Query from '../Query.js';
 let { Button, Icon, Table } =AntD;
 
 class PagePermission extends React.Component {
     constructor(props) {
         super(props);
 
-        this.data = [{
-            key: '1',
-            name: '胡彦斌',
-            phone: '13904015882',
-            address: '北京西湖区湖底公园1号'
-        }, {
-            key: '2',
-            name: '胡彦祖',
-            phone: '13905015882',
-            address: '天津西湖区湖底公园2号'
-        }, {
-            key: '3',
-            name: '李大嘴',
-            phone: '13914015782',
-            address: '沈阳西湖区湖底公园3号'
-        }, {
-            key: '4',
-            name: '胡彦祖',
-            phone: '13905015882',
-            address: '天津西湖区湖底公园2号'
-        }, {
-            key: '5',
-            name: '胡彦祖',
-            phone: '13905015882',
-            address: '天津西湖区湖底公园2号'
-        }, {
-            key: '6',
-            name: '胡彦祖',
-            phone: '13905015882',
-            address: '天津西湖区湖底公园2号'
-        }, {
-            key: '7',
-            name: '胡彦祖',
-            phone: '13905015882',
-            address: '天津西湖区湖底公园2号'
-        }, {
-            key: '9',
-            name: '胡彦祖',
-            phone: '13905015882',
-            address: '天津西湖区湖底公园2号'
-        }, {
-            key: '8',
-            name: '胡彦祖',
-            phone: '13905015882',
-            address: '天津西湖区湖底公园2号'
-        }];
-
         this.state = {
-            dataSource: this.data
+            dataSource: undefined,
+            total:0
         };
 
         var me=this;
@@ -64,17 +20,20 @@ class PagePermission extends React.Component {
                 title: '姓名',
                 dataIndex: 'name',
                 key: 'name',
+                width:300
             }, {
                 title: '手机号',
                 dataIndex: 'phone',
                 key: 'phone',
+                width:300
             }, {
                 title: '管辖油站',
-                dataIndex: 'address',
-                key: 'address',
+                dataIndex: 'station_name',
+                key: 'station_name',
             }, {
                 title: '操作',
-                key: 'operation',
+                key: 'd',
+                width:200,
                 render(text, record) {
                     return (
                         <div>
@@ -86,42 +45,66 @@ class PagePermission extends React.Component {
             }];
     }
 
-    editHandler(text, record){
-        console.log(record);
-    }
+    componentWillMount() {
 
-    delHandler(text, record){
-        console.log(record);
-    }
+        // 取得操作员列表信息
+        Query.get(oilConst.reqOperatorList, '', function (data) {
+            console.log('取得操作员列表信息:',data.data.items);
+            this.setState({dataSource:data.data.items});
+            this.setState({total:data.data.page.total});
 
+        }.bind(this));
+    }
 
 
     componentDidMount() {
 
     }
 
-    componentWillMount() {
-        //var me=this;
-        //$.ajax({
-        //    type: 'get',
-        //    data:'',
-        //    url: '/admin/account/info',
-        //    dataType:'json',
-        //    success: function(data){
-        //        console.log('+++++++++++++++++');
-        //        console.log(data);
-        //        me.setState({dataSource:data.data.operator});
-        //    }
-        //
-        //});
+    /**
+     * table数据绑定key
+     *
+     * @param record 行数据
+     * @returns {*}
+     */
+    getRowKey(record) {
+        return record.id;
+    }
+
+    /**
+     * 编辑操作员数据
+     *
+     * @param text todo
+     * @param record 每行数据对象
+     */
+    editHandler(text, record){
+        console.log('编辑:',record);
+        // 带参数
+        var data={status:'edit',data:record};
+        var url={pathname:'/pageaddpermission',state:{data}};
+        this.context.router.push(url);
+    }
+
+    /**
+     * 删除操作员数据
+     *
+     * @param text todo
+     * @param record 每行数据对象
+     */
+    delHandler(text, record){
+        console.log(record);
     }
 
     /**
      * 跳转到新增权限人员界面
      */
     toAdd(){
-        console.log(this.context.router);
-        this.context.router.push('/pageaddpermission');
+        // 带参数
+        //var data={a:'123',b:'456'};
+        //var url={pathname:'/pageaddpermission',state:{data}};
+        //var url={pathname:'/pageaddpermission',state:{data}};
+        var url={pathname:'/pageaddpermission'};
+        this.context.router.push(url);
     }
 
     render() {
@@ -135,9 +118,9 @@ class PagePermission extends React.Component {
                     </Button>
                 </div>
                 <div className="pagePermission_Table">
-                    <Table columns={this.columns} dataSource={this.state.dataSource}
+                    <Table rowKey={this.getRowKey.bind(this)} columns={this.columns} dataSource={this.state.dataSource}
                            pagination={{ pageSize: 10 }} useFixedHeader/>
-                    <label className="dataTotal">共 <i style={{color:"red"}}>3</i> 条记录</label>
+                    <label className="dataTotal">共 <i style={{color:"red"}}>{this.state.total}</i> 条记录</label>
                 </div>
             </div>
         );
