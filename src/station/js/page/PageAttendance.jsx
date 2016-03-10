@@ -51,6 +51,7 @@ const columns = [
     }
 ];
 
+const OPTIONS = {hour12: false};
 function formatDate(seconds) {
     const date = new Date(seconds * 1000);
     return date.toLocaleString('zh-Hans-CN', OPTIONS);
