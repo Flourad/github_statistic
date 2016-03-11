@@ -5,7 +5,8 @@
 
 import SilderBar from './component/SilderBar.jsx';
 import Header from './component/Header.jsx';
-import Query from './Query.js';
+import LoginStore from './stores/GlobalStore';
+import LoginAction from './actions/GlobalAction';
 import CommonData from './common/CommonData.js';
 
 class App extends React.Component {
@@ -16,18 +17,22 @@ class App extends React.Component {
             user_name: '',
             stations: []
         };
+        LoginStore.listen(this.onUpdateLoginState.bind(this));
+        this.init();
     }
 
-    componentWillMount() {
-        // 获取站长信息
+    /**
+     * 初始化数据
+     */
+    init() {
+        LoginAction.updateLoginState();
+    }
 
-        Query.get(oilConst.reqAccountInfo, '', function (data) {
-            CommonData.loginData = data;
-            console.log('user info: ' + JSON.stringify(CommonData.loginData));
-
-            this.setState({'user_name': data.data.user_name});
-
-        }.bind(this));
+    /**
+     * 获取用户登录信息
+     */
+    onUpdateLoginState(data) {
+        this.setState({'user_name': data.data.user_name});
     }
 
     render() {
