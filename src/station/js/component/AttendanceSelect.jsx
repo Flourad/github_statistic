@@ -19,7 +19,7 @@ class AttendanceSelect extends React.Component {
 
     disabledDate(current) {
         // can not select days after today
-        return current && current.getTime() > Date.now();
+        return current&&current.getTime() > Date.now();
     }
 
     onStartTimeChange(time) {
@@ -41,17 +41,26 @@ class AttendanceSelect extends React.Component {
 
     render() {
         return (
-            <div className="dis-box">
-                <Select style={{ width: '300px'}} placeholder="请选择油站" onChange={this.onStationChange}>
-                    {this.children}
-                </Select>
-                <DatePicker onChange={this.onStartTimeChange} placeholder="开始日期" disabledDate={this.disabledDate}></DatePicker>
-                至
-                <DatePicker onChange={this.onEndTimeChange} placeholder="结束日期" disabledDate={this.disabledDate}></DatePicker>
-                <Button type="primary" onClick={this.onQuery}>
-                    <Icon type="search" />
-                    查询
-                </Button>
+            <div className="attendanceSelect">
+                <div className="attendanceSelectTitle">
+                    <span>油站 :</span>
+                    <span style={{marginLeft:'302px'}}>时间 :</span>
+                </div>
+                <div className='attendanceSelectBody'>
+                    <Select style={{ width: '300px',marginRight:'30px',fontSize: '14px'}} placeholder="请选择油站" onChange={this.onStationChange}>
+                        {this.children}
+                    </Select>
+                    <DatePicker onChange={this.onStartTimeChange} placeholder="开始日期"
+                                disabledDate={this.disabledDate}></DatePicker>
+                    <span style={{marginRight:'20px'}}>至</span>
+                    <DatePicker onChange={this.onEndTimeChange} placeholder="结束日期"
+                                disabledDate={this.disabledDate}></DatePicker>
+                    <Button type="primary" onClick={this.onQuery}>
+                        <Icon type="search"/>
+                        查询
+                    </Button>
+                </div>
+
             </div>
         );
     }

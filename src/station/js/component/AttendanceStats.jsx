@@ -104,12 +104,16 @@ class AttendanceStats extends React.Component {
 
     render() {
         return (
-            <Table columns={columns}
-                dataSource={this.state.data}
-                pagination={this.state.pagination}
-                loading={this.state.loading}
-                onChange={this.handleTableChange}
-                rowKey={record => record.squad_id} />
+            <div className="queryBody">
+                <Table columns={columns}
+                       dataSource={this.state.data}
+                       pagination={this.state.pagination}
+                       loading={this.state.loading}
+                       onChange={this.handleTableChange}
+                       rowKey={record => record.squad_id}
+                       useFixedHeader />
+            </div>
+
         );
     }
 };

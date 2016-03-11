@@ -148,7 +148,7 @@ class PagePermission extends React.Component {
         return (
             <div id="pagePermission">
                 <div className="pagePermission_Header">
-                    <h1 className="headtext">权限管理</h1>
+                    <span className="headtext">权限管理</span>
                     <Button onClick={this.toAdd.bind(this)} className="headButton" type="primary" size="large">
                         <Icon type="plus"/>
                         新增人员

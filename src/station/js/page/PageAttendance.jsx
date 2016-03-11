@@ -2,7 +2,7 @@ import CommonData from '../common/CommonData.js';
 import AttendanceSelect from '../component/AttendanceSelect.jsx';
 import AttendanceStats from '../component/AttendanceStats.jsx';
 
-class Attendance extends React.Component {
+class PageAttendance extends React.Component {
     constructor(props) {
         super(props);
 
@@ -15,9 +15,12 @@ class Attendance extends React.Component {
 
     render() {
         return (
-            <div>
-                <p>班次查询</p>
-                <AttendanceSelect data={CommonData.loginData.data.stations}/>
+            <div id="pageAttendance">
+                <div>
+                    <div className='queryHeader'>班次查询</div>
+                    <AttendanceSelect data={CommonData.loginData.data.stations}/>
+                </div>
+
                 <AttendanceStats/>
             </div>
         );
@@ -25,4 +28,4 @@ class Attendance extends React.Component {
 }
 
 
-export default Attendance;
+export default PageAttendance;

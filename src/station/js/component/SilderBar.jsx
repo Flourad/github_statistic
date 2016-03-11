@@ -38,7 +38,7 @@ class SilderBar extends React.Component {
 
                         <SubMenu
                             title={
-                        <Link to='attendance'>
+                        <Link to='pageAttendance'>
                             <i className="iconImage icon-trclassselect"></i>
                             <label className='usertext'>{this.constText.trClassSelect}</label>
                         </Link>}>
