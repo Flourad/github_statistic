@@ -4,6 +4,8 @@
  */
 
 import CommonData from '../common/CommonData';
+import LoginStore from '../stores/GlobalStore';
+import LoginAction from '../actions/GlobalAction';
 import Query from '../Query.js';
 
 let { Button , Select } =AntD;
@@ -17,29 +19,27 @@ class PageAddPermission extends React.Component {
             actionName: '新增人员',
             userName: '',
             phone: '',
-            stationId: ''
+            stationId: '',
+            stations: [],
         };
-        if (this.props.location.state) {
-            var info = this.props.location.state;
-            console.debug("新增/编辑 人员:", info);
-            //if (info.data.status === 'edit') {
-            //    this.state.actionName = "编辑人员";
-            //    // 姓名
-            //    if (info.data.data.name) {
-            //        this.state.userName = info.data.data.name;
-            //    }
-            //    // 手机号
-            //    if (info.data.data.phone) {
-            //        this.state.phone = info.data.data.phone;
-            //    }
-            //    // 油站
-            //    if (info.data.data.station_id) {
-            //        this.state.stationId = info.data.data.station_id;
-            //    }
-            //
-            //}
-        }
 
+        if (LoginStore.loginData.data && LoginStore.loginData.data.stations) {
+            this.state.stations = LoginStore.loginData.data.stations;
+            console.debug('已经存在 stations=', this.state.stations);
+        } else {
+            LoginAction.updateLoginState();
+            LoginStore.listen(this.onUpdateLoginState.bind(this));
+        }
+    }
+
+    /**
+     * 获取用户信息油站列表
+     *
+     * @param data 用户信息数据
+     */
+    onUpdateLoginState(data) {
+        console.debug('重新获取的', data.data.stations);
+        this.setState({stations: data.data.stations});
     }
 
     /**
@@ -63,16 +63,10 @@ class PageAddPermission extends React.Component {
         let station = this.state.stationId;
 
         // 编辑
-        //if (info.status === 'edit') {
-        //
-        //}
-        // 新增
-        //else {
-            var reqData={name:name,phone:phone,station_id:station};
-            Query.post(oilConst.reqOperatorSave, reqData, function (data) {
-                console.debug('新加权限:',data);
-            }.bind(this));
-        //}
+        var reqData = {name: name, phone: phone, station_id: station};
+        Query.post(oilConst.reqOperatorSave, reqData, function (data) {
+            console.debug('新加权限:', data);
+        }.bind(this));
     }
 
     /**
@@ -107,13 +101,15 @@ class PageAddPermission extends React.Component {
 
         let optionArray = [];
 
-        if (CommonData.loginData.data) {
-            let stationInfo = CommonData.loginData.data.stations;
+        if (this.state.stations) {
+            let stationInfo = this.state.stations;
             for (let i = 0; i < stationInfo.length; i++) {
                 let optionDom = (<Option key={stationInfo[i].station_id}
                                          value={stationInfo[i].station_id}>{stationInfo[i].name}</Option>);
                 optionArray.push(optionDom);
             }
+        } else {
+            console.debug('尚未取到油站列表');
         }
 
         return (
@@ -125,7 +121,8 @@ class PageAddPermission extends React.Component {
                 <div className="pageAddPermission_Body">
                     <div className="pageAddPermission_container">
                         <label>姓名</label>
-                        <input onChange={this.userNameChange.bind(this)} type="text" value={this.state.userName}></input>
+                        <input onChange={this.userNameChange.bind(this)} type="text"
+                               value={this.state.userName}></input>
                         <label>手机号</label>
                         <input onChange={this.phoneChange.bind(this)} type="text" value={this.state.phone}/>
                         <label>管辖油站</label>
