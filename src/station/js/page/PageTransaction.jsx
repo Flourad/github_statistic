@@ -119,9 +119,9 @@ class PageTransaction extends React.Component {
         GlobalStore.listen(this.onUpdateStationInfo.bind(this));
 
         if(GlobalStore.loginData.data.stations) {//处理从其它页面跳转的情况
-            const isFirstQuery = true;
             TransactionStore.stationList = GlobalStore.loginData.data.stations.map((item, idx)=>({station_id:item.station_id,name:item.name}));
-            this.getTransactionList(this.state.pagination.size, this.state.pagination.current,isFirstQuery);
+            var stations = TransactionStore.stationList.map(item=>item.station_id);
+            this.getTransactionList(this.state.pagination.size, this.state.pagination.current,stations);
         }
     }
 
@@ -139,8 +139,8 @@ class PageTransaction extends React.Component {
         if(type===1) {
             console.log('updateStationList');
             this.setState({stationList:stations});
-            const isFirstQuery = true;
-            this.getTransactionList(this.state.pagination.size, this.state.pagination.current,isFirstQuery);
+            var stations = this.state.stationList.map(item=>item.station_id);
+            this.getTransactionList(this.state.pagination.size, this.state.pagination.current,stations);
         } else if(type===2) {
             console.log('updateSelectedStations');
             this.setState({selectedStationList: stations});
@@ -183,10 +183,12 @@ class PageTransaction extends React.Component {
             selectedStationList = selectedStationList.filter((item, index)=>(item != station_id))
         }
         TransactionActions.updateSelectedStations(selectedStationList,2);
-
     }
-
     queryHandler() {
+        if (this.state.selectedStationList.length==0) {
+            alert('选择油站不能为空哦，请重新选择~');
+            return false;
+        }
         const pager = this.state.pagination;
         pager.current = 1;
         pager.size = 10;
@@ -194,20 +196,14 @@ class PageTransaction extends React.Component {
         this.setState({
             pagination: pager
         });
-        const isFirstQuery = false;
-        this.getTransactionList(pager.size, pager.current, isFirstQuery);
+        this.getTransactionList(pager.size, pager.current,this.state.selectedStationList);
     }
 
-    getTransactionList(size, page, isFirstQuery) {
+    getTransactionList(size, page, stations) {
         // 取得操作员列表信息
-        if (!isFirstQuery && this.state.selectedStationList.length===0) {
-            alert('选择油站不能为空哦，请重新选择~');
-            return false;
-        }
-        var stationList = this.state.stationList || TransactionStore.stationList;
-        var stations = isFirstQuery ? stationList.map(item=>item.station_id):this.state.selectedStationList;
-        var order_id = isFirstQuery ?'':this.refs.orderID.value;
-        var time_array = isFirstQuery ?'':(this.refs.time.state ? this.refs.time.state.value:'');
+        var stationList = stations;
+        var order_id = this.refs.orderID?this.refs.orderID.value:'';
+        var time_array = this.refs.time ? this.refs.time.state.value:'';
         var start_date = '';
         var end_date = '';
         if (time_array&&time_array[0]&&time_array[1]) {
@@ -239,7 +235,7 @@ class PageTransaction extends React.Component {
                         refund_count: summary.refund_count,
                         refund_total: summary.refund_total
                     }
-                })
+                });
             } else {
                 console.log('取得操作员列表为空');
             }
@@ -247,11 +243,11 @@ class PageTransaction extends React.Component {
     }
 
     exportTransaction() {
-        // 取得操作员列表信息
         if (this.state.selectedStationList.length==0) {
             alert('选择油站不能为空哦，请重新选择~');
             return false;
         }
+        // 取得操作员列表信息
         var stations = this.state.selectedStationList;
         var order_id = this.refs.orderID.value;
         var time_array = this.refs.time.state ? this.refs.time.state.value:'';
@@ -266,7 +262,6 @@ class PageTransaction extends React.Component {
         var url = 'http://'+window.location.host+'/'+oilConst.reqTransactionList+'?'+reqData;
         window.open(url);
     }
-
     render() {
         var four_stations = '';
         var stations = this.state.stationList || TransactionStore.stationList;
@@ -364,8 +359,11 @@ class PageTransaction extends React.Component {
             pagination: pager
         });
 
-        const isFirstQuery = false;
-        this.getTransactionList(pager.size, pager.current,isFirstQuery);
+        var stations =  this.state.stationList.map(item=>item.station_id);
+        if(this.state.selectedStationList.length>0){
+            stations = this.state.selectedStationList;
+        }
+        this.getTransactionList(pager.size, pager.current,stations);
     }
 }
 
