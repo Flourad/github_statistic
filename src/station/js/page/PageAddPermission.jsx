@@ -67,12 +67,12 @@ class PageAddPermission extends React.Component {
         //
         //}
         // 新增
-        else {
+        //else {
             var reqData={name:name,phone:phone,station_id:station};
             Query.post(oilConst.reqOperatorSave, reqData, function (data) {
                 console.debug('新加权限:',data);
             }.bind(this));
-        }
+        //}
     }
 
     /**

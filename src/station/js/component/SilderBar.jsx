@@ -28,56 +28,55 @@ class SilderBar extends React.Component {
                 <div>
                     <label className="menuGroup">{this.constText.trManagement}</label>
                     <Menu mode="vertical" theme="dark">
-                        <SubMenu
-                            title={
-                        <Link to='transaction'>
-                            <i className="iconImage icon-trselect"></i>
-                            <label className='usertext'>{this.constText.trSelect}</label>
-                        </Link>}>
-                        </SubMenu>
+                        <Menu.Item>
+                            <Link to='transaction'>
+                                <i className="iconImage icon-trselect"></i>
+                                <label className='usertext'>{this.constText.trSelect}</label>
+                                <i className="iconArrow icon-arrow"></i>
+                            </Link>
+                        </Menu.Item>
 
-                        <SubMenu
-                            title={
-                        <Link to='pageAttendance'>
-                            <i className="iconImage icon-trclassselect"></i>
-                            <label className='usertext'>{this.constText.trClassSelect}</label>
-                        </Link>}>
-                        </SubMenu>
+                        <Menu.Item>
+                            <Link to='pageAttendance'>
+                                <i className="iconImage icon-trclassselect"></i>
+                                <label className='usertext'>{this.constText.trClassSelect}</label>
+                                <i className="iconArrow icon-arrow"></i>
+                            </Link>
+                        </Menu.Item>
                     </Menu>
                 </div>
 
                 <div>
                     <label className="menuGroup">{this.constText.operate}</label>
                     <Menu mode="vertical" theme="dark">
-                        <SubMenu
-                            title={
-                        <Link to='/#/c'>
-                            <i className="iconImage icon-opexpand"></i>
-                            <label className='usertext'>{this.constText.opExpand}</label>
-                        </Link>}>
-                        </SubMenu>
+                        <Menu.Item>
+                            <Link to='/#/c'>
+                                <i className="iconImage icon-opexpand"></i>
+                                <label className='usertext'>{this.constText.opExpand}</label>
+                                <i className="iconArrow icon-arrow"></i>
+                            </Link>
+                        </Menu.Item>
 
-                        <SubMenu
-                            title={
-                        <Link to='/#/d'>
-                            <i className="iconImage icon-opnearbyuser"></i>
-                            <label className='usertext'>{this.constText.opNearByUser}</label>
-                        </Link>}>
-                        </SubMenu>
+                        <Menu.Item>
+                            <Link to='/#/d'>
+                                <i className="iconImage icon-opnearbyuser"></i>
+                                <label className='usertext'>{this.constText.opNearByUser}</label>
+                                <i className="iconArrow icon-arrow"></i>
+                            </Link>
+                        </Menu.Item>
                     </Menu>
                 </div>
 
                 <div>
                     <label className="menuGroup">{this.constText.oilManagement}</label>
                     <Menu mode="vertical" theme="dark">
-                        <SubMenu
-                            title={
-                        <Link to='pagepermission'>
-                            <i className="iconImage icon-accessmanagement"></i>
-                            <label className='usertext'>{this.constText.accessManagement}</label>
-                        </Link>}>
-                        </SubMenu>
-
+                        <Menu.Item>
+                            <Link to='pagepermission'>
+                                <i className="iconImage icon-accessmanagement"></i>
+                                <label className='usertext'>{this.constText.accessManagement}</label>
+                                <i className="iconArrow icon-arrow"></i>
+                            </Link>
+                        </Menu.Item>
                     </Menu>
                 </div>
             </div>
