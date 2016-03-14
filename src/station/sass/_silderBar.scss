@@ -47,7 +47,7 @@
     display: inline-block;
     position: relative;
     top: 15px;
-    left: 9px;
+    left: 12px;
   }
 
   .ant-menu-dark{
@@ -77,6 +77,11 @@
 
   ul,li,a {
     outline:none;
+  }
+
+  a:visited{
+    background-color: #1d2029;
+    border-left: 3px solid red;
   }
 
 }

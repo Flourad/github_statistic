@@ -33,9 +33,6 @@
       @include box-shadow( 4px 1px 10px #A1A1A1);
     }
 
-    .ant-table {
-      font-size: 16px;
-    }
 
     .columnButton {
       display: inline-block;
@@ -49,17 +46,9 @@
       font-size: 14px;
     }
 
-    .ant-pagination-item-active{
-      background-color: #5a5d67;
-      border-color: #5a5d67;
-    }
-
     .ant-table-body {
       overflow: auto;
       height: 400px;
     }
-
-
-
   }
 }

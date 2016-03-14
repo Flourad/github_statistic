@@ -15,6 +15,7 @@
     font-size: 14px;
     line-height: 42px;
     height: 42px;
+    @include box-shadow( -2px 4px 10px #A1A1A1);
   }
 
   .ant-menu-submenu-open{
@@ -47,6 +48,14 @@
     position: relative;
     top: 8px;
     left: 13px;
+  }
+
+  .ant-menu-submenu-horizontal > .ant-menu {
+    top: 100%;
+    left: 0;
+    position: absolute;
+    min-width: 100%;
+    margin-top: 0px;
   }
 }
 
