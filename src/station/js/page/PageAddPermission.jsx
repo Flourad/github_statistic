@@ -22,22 +22,22 @@ class PageAddPermission extends React.Component {
         if (this.props.location.state) {
             var info = this.props.location.state;
             console.debug("新增/编辑 人员:", info);
-            if (info.data.status === 'edit') {
-                this.state.actionName = "编辑人员";
-                // 姓名
-                if (info.data.data.name) {
-                    this.state.userName = info.data.data.name;
-                }
-                // 手机号
-                if (info.data.data.phone) {
-                    this.state.phone = info.data.data.phone;
-                }
-                // 油站
-                if (info.data.data.station_id) {
-                    this.state.stationId = info.data.data.station_id;
-                }
-
-            }
+            //if (info.data.status === 'edit') {
+            //    this.state.actionName = "编辑人员";
+            //    // 姓名
+            //    if (info.data.data.name) {
+            //        this.state.userName = info.data.data.name;
+            //    }
+            //    // 手机号
+            //    if (info.data.data.phone) {
+            //        this.state.phone = info.data.data.phone;
+            //    }
+            //    // 油站
+            //    if (info.data.data.station_id) {
+            //        this.state.stationId = info.data.data.station_id;
+            //    }
+            //
+            //}
         }
 
     }
@@ -63,9 +63,9 @@ class PageAddPermission extends React.Component {
         let station = this.state.stationId;
 
         // 编辑
-        if (info.status === 'edit') {
-
-        }
+        //if (info.status === 'edit') {
+        //
+        //}
         // 新增
         else {
             var reqData={name:name,phone:phone,station_id:station};

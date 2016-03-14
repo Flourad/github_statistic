@@ -33,7 +33,7 @@ class PagePermission extends React.Component {
                 title: '手机号',
                 dataIndex: 'phone',
                 key: 'phone',
-                width: 300
+                width: 200
             }, {
                 title: '管辖油站',
                 dataIndex: 'station_name',
@@ -41,11 +41,10 @@ class PagePermission extends React.Component {
             }, {
                 title: '操作',
                 key: 'd',
-                width: 200,
+                width: 100,
                 render(text, record) {
                     return (
                         <div>
-                            <button className="columnButton" onClick={me.editHandler.bind(me,text, record)}>编辑</button>
                             <button className="columnButton" onClick={me.delHandler.bind(me,text, record)}>删除</button>
                         </div>
                     );
@@ -91,20 +90,6 @@ class PagePermission extends React.Component {
      */
     getRowKey(record) {
         return record.id;
-    }
-
-    /**
-     * 编辑操作员数据
-     *
-     * @param text todo
-     * @param record 每行数据对象
-     */
-    editHandler(text, record) {
-        console.debug('编辑:', record);
-        // 带参数
-        var data = {status: 'edit', data: record};
-        var url = {pathname: '/pageaddpermission', state: {data}};
-        this.context.router.push(url);
     }
 
     /**
