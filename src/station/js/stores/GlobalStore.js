@@ -11,7 +11,7 @@ var LoginStore = Reflux.createStore({
 
     loginData: {
         data: {
-            stations: {},
+            stations: undefined,
             user_name: '',
         },
         errno: '',

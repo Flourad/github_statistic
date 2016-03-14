@@ -16,4 +16,6 @@ oilConst.reqOperateDelete = '/admin/operator/delete';
 
 oilConst.reqAttendance = '/admin/Shift/query';
 
+oilConst.reqTransactionList = 'admin/Transaction/query';
+
 window.oilConst = oilConst;

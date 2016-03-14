@@ -1,112 +1,426 @@
 /**
  * Created by danyu on 3/7/16.
  */
+import Query from '../Query.js';
+import GlobalStore from '../stores/GlobalStore.js';
 
-let { Button, Icon, DatePicker, Row, Col, Table} = AntD;
+let { Button, Icon, DatePicker, Table, Transfer} = AntD;
 let { RangePicker } = DatePicker;
 
-const columns = [{
-    title: '序号',
-    dataIndex: 'num'
-}, {
-    title: '订单号',
-    dataIndex: 'orderID'
-}, {
-    title: '油站',
-    dataIndex: 'station'
-}, {
-    title: '交易类型',
-    dataIndex: 'type'
-}, {
-    title: '金额',
-    dataIndex: 'money'
-},  {
-    title: '时间',
-    dataIndex: 'time'
-}];
+var TransactionActions = Reflux.createActions([
+    'updateSelectedStations',
+    'updateStationList'
+]);
 
-const data = [{
-    key: '1',
-    num: 123,
-    orderID: 23123,
-    station: '壳牌圆西路',
-    type: '收款',
-    money: 3213,
-    time: '2016-2-1 15:01:10'
-}, {
-    key: '2',
-    num: 123,
-    orderID: 23123,
-    station: '壳牌圆西路',
-    type: '收款',
-    money: 3213,
-    time: '2016-2-1 15:01:10'
-}, {
-        key: '3',
-        num: 123,
-        orderID: 23123,
-        station: '壳牌圆西路',
-        type: '收款',
-        money: 3213,
-        time: '2016-2-1 15:01:10'
-}];
+var TransactionStore = Reflux.createStore({
+    selectedStationList: [],
+    stationList: [],
+    listenables: [TransactionActions],
+    onUpdateSelectedStations: function (selectedStationList,type) {
+        this.selectedStationList = selectedStationList;
+        this.trigger(selectedStationList,type);
+    },
+    onUpdateStationList: function (stationList,type) {
+        this.stationList = stationList;
+        this.trigger(stationList,type);
+    }
+});
+
+Date.prototype.format = function () {
+    var y = this.getFullYear();
+    var m = bit_format(this.getMonth() + 1);
+    var d = bit_format(this.getDate());
+    var h = bit_format(this.getHours());
+    var mins = bit_format(this.getMinutes());
+    var secs = bit_format(this.getSeconds());
+
+    return y + '-' + m + '-' + d + " " + h + ":" + mins + ':' + secs;
+}
+
+function bit_format(origin) {
+    return (origin > 9 ? origin : '0' + origin);
+}
 
 class PageTransaction extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            isShowMore: false,
+            dataSource: undefined,
+            total: 0,
+            pagination: {
+                // 当前页
+                current: 1,
+                // 每页显示的条数
+                size: 10
+            },
+            loading: false,
+            statistic_info: {
+                pay_count: '',
+                pay_total: '',
+                refund_count: '',
+                refund_total: ''
+            },
+            isAllChecked: false,
+            stationList: TransactionStore.stationList,
+            selectedStationList: TransactionStore.selectedStationList
+        };
+
+        var me = this;
+        this.columns = [
+            {
+                title: '序号',
+                dataIndex: 'num',
+                key: 'num',
+                render(text, record, index) {
+                    return (
+                        <span>{index + 1}</span>
+                    )
+                }
+            }, {
+                title: '订单号',
+                dataIndex: 'order_id',
+                key: 'order_id',
+                render(text, record, index) {
+                    return (
+                        <a onClick={me.goDetail.bind(me,text,record)}>{text}</a>
+                    );
+                }
+            }, {
+                title: '油站',
+                dataIndex: 'name',
+                key: 'name'
+            }, {
+                title: '交易类型',
+                dataIndex: 'type',
+                key: 'type',
+                render(text, record, index) {
+                    return (
+                        <span>{text === '1' ? '收款' : '退款'}</span>
+                    )
+                }
+            }, {
+                title: '金额',
+                dataIndex: 'amount',
+                key: 'amount'
+            }, {
+                title: '时间',
+                dataIndex: 'create_time',
+                key: 'create_time',
+                render(text, record, index) {
+                    var d = new Date(text * 1000);
+                    return (
+                        <span>{d.format()}</span>
+                    )
+                }
+            }];
+
+        TransactionStore.listen(this.onUpdateStations.bind(this));
+        GlobalStore.listen(this.onUpdateStationInfo.bind(this));
+
+        if(GlobalStore.loginData.data.stations) {//处理从其它页面跳转的情况
+            const isFirstQuery = true;
+            TransactionStore.stationList = GlobalStore.loginData.data.stations.map((item, idx)=>({station_id:item.station_id,name:item.name}));
+            this.getTransactionList(this.state.pagination.size, this.state.pagination.current,isFirstQuery);
+        }
+    }
+
+    /**
+     * table数据绑定key
+     *
+     * @param record 行数据
+     * @returns {*}
+     */
+    getRowKey(record) {
+        return record.id;
+    }
+
+    onUpdateStations(stations,type) {
+        if(type===1) {
+            console.log('updateStationList');
+            this.setState({stationList:stations});
+            const isFirstQuery = true;
+            this.getTransactionList(this.state.pagination.size, this.state.pagination.current,isFirstQuery);
+        } else if(type===2) {
+            console.log('updateSelectedStations');
+            this.setState({selectedStationList: stations});
+        }
+    }
+
+    onUpdateStationInfo(info) {
+        var stations = info.data.stations.map((item, idx)=>({station_id:item.station_id,name:item.name}));
+        TransactionActions.updateStationList(stations,1);
+    }
+
+    goDetail(text, record) {
+        //var data = {data: record};
+        //var url = {pathname: 'transactionDetail', state: {data}};
+    }
+
+
+    componentWillMount() {
+        //if (TransactionStore.stationList&&TransactionStore.stationList.length>0) {
+        //    const isFirstQuery = true;
+        //    this.getTransactionList(this.state.pagination.size, this.state.pagination.current,isFirstQuery);
+        //}
+
+    }
+
+    selectAllHandler(ev) {
+        this.setState({isAllChecked: !this.state.isAllChecked});
+        if (!this.state.isAllChecked) {
+            TransactionActions.updateSelectedStations(this.state.stationList.map(item=>item.station_id),2);
+        } else {
+            TransactionActions.updateSelectedStations([],2);
+        }
+    }
+
+    selectSingle(station_id) {
+        var selectedStationList = TransactionStore.selectedStationList;
+        if (selectedStationList.indexOf(station_id) === -1) {
+            selectedStationList.push(station_id);
+        } else {
+            selectedStationList = selectedStationList.filter((item, index)=>(item != station_id))
+        }
+        TransactionActions.updateSelectedStations(selectedStationList,2);
+
+    }
+
+    queryHandler() {
+        const pager = this.state.pagination;
+        pager.current = 1;
+        pager.size = 10;
+
+        this.setState({
+            pagination: pager
+        });
+        const isFirstQuery = false;
+        this.getTransactionList(pager.size, pager.current, isFirstQuery);
+    }
+
+    getTransactionList(size, page, isFirstQuery) {
+        // 取得操作员列表信息
+        if (!isFirstQuery && this.state.selectedStationList.length===0) {
+            alert('选择油站不能为空哦，请重新选择~');
+            return false;
+        }
+        var stationList = this.state.stationList || TransactionStore.stationList;
+        var stations = isFirstQuery ? stationList.map(item=>item.station_id):this.state.selectedStationList;
+        var order_id = isFirstQuery ?'':this.refs.orderID.value;
+        var time_array = isFirstQuery ?'':(this.refs.time.state ? this.refs.time.state.value:'');
+        var start_date = '';
+        var end_date = '';
+        if (time_array&&time_array[0]&&time_array[1]) {
+            start_date = new Date(time_array[0].time).format();
+            end_date = new Date(time_array[1].time).format();
+        }
+
+        var reqData = {
+            size: size,
+            page: page,
+            stations: stations,
+            order_id: order_id,
+            start_date: start_date,
+            end_date: end_date
+        };
+        this.setState({loading: true});
+        Query.get(oilConst.reqTransactionList, reqData, function (data) {
+            this.setState({loading: false});
+            if (data && data.data && data.data.items) {
+                console.log('取得操作员列表信息:', data.data.items);
+                this.setState({dataSource: data.data.items});
+                this.setState({total: data.data.page.total});
+                this.setState({pagination: {total: data.data.page.total}});
+                var summary = data.data.summary;
+                this.setState({
+                    statistic_info: {
+                        pay_count: summary.pay_count,
+                        pay_total: summary.pay_total,
+                        refund_count: summary.refund_count,
+                        refund_total: summary.refund_total
+                    }
+                })
+            } else {
+                console.log('取得操作员列表为空');
+            }
+        }.bind(this));
+    }
+
+    exportTransaction() {
+        // 取得操作员列表信息
+        if (this.state.selectedStationList.length==0) {
+            alert('选择油站不能为空哦，请重新选择~');
+            return false;
+        }
+        var stations = this.state.selectedStationList;
+        var order_id = this.refs.orderID.value;
+        var time_array = this.refs.time.state ? this.refs.time.state.value:'';
+        var start_date = '';
+        var end_date = '';
+        if (time_array&&time_array[0]&&time_array[1]) {
+            start_date = new Date(time_array[0].time).format();
+            end_date = new Date(time_array[1].time).format();
+        }
+        var stationsReq = stations.map((item)=>('stations%5B%5D='+item+'&')).reduce((pre,cur)=>(pre+cur));
+        var reqData = 'excel='+true+'&'+stationsReq+'order_id='+order_id+'&start_date='+start_date+'&end_date='+end_date;
+        var url = 'http://'+window.location.host+'/'+oilConst.reqTransactionList+'?'+reqData;
+        window.open(url);
     }
 
     render() {
-        return(
+        var four_stations = '';
+        var stations = this.state.stationList || TransactionStore.stationList;
+        var show_stations = stations;
+        var more_stations = '';
+        if (stations.length > 4) {
+            show_stations = stations.slice(0, 4);
+            more_stations = stations.slice(4, stations.length);
+        }
+
+        four_stations =
+            (<ul className='fourStations'>
+                <li>油站：</li>
+                <li key='all'><label><input type='checkbox' name='checkAll' ref='select'
+                                            onChange={this.selectAllHandler.bind(this)}/>全选</label></li>
+                {
+                    show_stations.map((item, idx)=>(
+                        <li key={idx}><label><input type='checkbox'
+                                                    checked={TransactionStore.selectedStationList&&TransactionStore.selectedStationList.indexOf(item.station_id)==-1?false:true}
+                                                    onChange={this.selectSingle.bind(this,item.station_id)}
+                                                    name='station' value={item.station_id}/>{item.name}</label></li>
+                    ))
+                }
+            </ul>)
+
+        return (
             <div id="pageTransaction">
                 <section className='sec1-query'>
                     <div className='queryHeader'>交易查询</div>
                     <div className='queryContent'>
-                        <table className='table-query'  cellSpacing="0" cellPadding='0'>
+                        <table className='table-query' cellSpacing="0" cellPadding='0'>
                             <tbody>
-                            <tr><td className="table-query-header">订单号</td><td className="table-query-header">时间：</td></tr>
-                            <tr><td><input type='text' style={{width:'15rem',marginTop:'10px'}}></input></td>
-                                <td><RangePicker style={{ width: 400,marginTop:'10px' }} showTime format="yyyy/MM/dd HH:mm:ss"/></td>
-                                <td><Button  type='primary' style={{marginTop:'10px'}}><Icon type="search"/>查询</Button></td>
-                                <td><Button style={{marginTop:'10px'}}>导出交易记录</Button></td>
+                            <tr>
+                                <td className="table-query-header">订单号</td>
+                                <td className="table-query-header">时间：</td>
+                            </tr>
+                            <tr>
+                                <td><input type='text' style={{width:'15rem',margin:'10px 0'}} ref='orderID'></input>
+                                </td>
+                                <td><RangePicker style={{ width: 400,margin:'10px 0' }} showTime
+                                                 format="yyyy/MM/dd HH:mm:ss" ref='time'/></td>
+                                <td><Button type='primary' className="queryBtn"
+                                            onClick={this.queryHandler.bind(this)}><Icon type="search"/>查询</Button></td>
+                                <td><Button type="ghost" style={{margin:'10px 0'}} className='exportBtn' onClick={this.exportTransaction.bind(this)}>导出交易记录</Button></td>
                             </tr>
                             </tbody>
                         </table>
+                        {four_stations}
+                        <div className='stationsSec'>
+                            {
+                                more_stations?<QueryMore moreStations = {more_stations} singleSelected={this.selectSingle}/>:''
+                            }
+                        </div>
                     </div>
                 </section>
-                <section className = 'sec2-statistic'>
+                <section className='sec2-statistic'>
                     <table cellSpacing="0" cellPadding='0'>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <div className='sec2-text'>收款笔数</div>
-                                    <div className='sec2-num'>1223</div>
-                                </td>
-                                <td>
-                                    <div className='sec2-text'>收款金额</div>
-                                    <div className='sec2-num'>123123</div>
-                                </td>
-                                <td>
-                                    <div className='sec2-text'>退款笔数</div>
-                                    <div className='sec2-num'>324</div>
-                                </td>
-                                <td>
-                                    <div className='sec2-text'>退款金额</div>
-                                    <div className='sec2-num'>8024</div>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                <div className='sec2-text'>收款笔数</div>
+                                <div className='sec2-num'>{this.state.statistic_info.pay_count}</div>
+                            </td>
+                            <td>
+                                <div className='sec2-text'>收款金额</div>
+                                <div className='sec2-num'>{this.state.statistic_info.pay_total}</div>
+                            </td>
+                            <td>
+                                <div className='sec2-text'>退款笔数</div>
+                                <div className='sec2-num'>{this.state.statistic_info.refund_count}</div>
+                            </td>
+                            <td>
+                                <div className='sec2-text'>退款金额</div>
+                                <div className='sec2-num'>{-this.state.statistic_info.refund_total}</div>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
-
                 </section>
                 <section className='sec3-table'>
-                    <Table columns={columns} dataSource={data} />
-                    <span className='total_records'>共 50 条记录</span>
+                    <Table rowKey={this.getRowKey.bind(this)} columns={this.columns} dataSource={this.state.dataSource} loading={this.state.loading}
+                           pagination={this.state.pagination} onChange={this.handleTableChange.bind(this)}/>
+                    <span className='total_records'>共 <i style={{color:"red"}}>{this.state.total}</i> 条记录</span>
                 </section>
             </div>
         )
     }
+
+    handleTableChange(pagination) {
+        const pager = this.state.pagination;
+        pager.current = pagination.current;
+        pager.size = 10;
+
+        this.setState({
+            pagination: pager
+        });
+
+        const isFirstQuery = false;
+        this.getTransactionList(pager.size, pager.current,isFirstQuery);
+    }
 }
+
+class QueryMore extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isShowMore: false,
+            searchResult: undefined
+        }
+    }
+
+    showMore() {
+        this.setState({isShowMore: this.state.isShowMore ? false : true});
+    }
+
+    searchInput(moreStations) {
+        const inputTxt = this.refs.searchInput.value.trim();
+        const searchResult = moreStations.filter(item=> item.name.indexOf(inputTxt)!=-1);
+        this.setState({searchResult:searchResult});
+    }
+
+    render() {
+        const showStations = this.state.searchResult?this.state.searchResult:this.props.moreStations;
+        const name = this.state.isShowMore?'bottom_none':'';
+        return (
+            <div>
+                <span className={'lookMore'+' '+name} onClick={this.showMore.bind(this)}>查看更多<i className='icon-look_up'></i></span>
+                {
+                    this.state.isShowMore ? (
+                        <div className='moreStationsList'>
+                            <div className="borderTop"></div>
+                            <input type='text' placeholder='搜索' className='inputSearch' ref='searchInput' onChange={this.searchInput.bind(this,this.props.moreStations)}/>
+                            <ul className='clearFix'>
+                                {
+                                    showStations.map((item,idx) =>
+                                            <li key={idx}><label><input type='checkbox'
+
+                                                                        checked={TransactionStore.selectedStationList&&TransactionStore.selectedStationList.indexOf(item.station_id)==-1?false:true}
+                                                                        onChange={this.props.singleSelected.bind(this,item.station_id)}
+                                                                        name='station' value={item.station_id}/>{item.name}</label></li>
+                                    )
+                                }
+                            </ul>
+                    </div>): ''
+                }
+            </div>
+        )
+    }
+}
+
+PageTransaction.contextTypes = {
+    router: function () {
+        return React.PropTypes.func.isRequired;
+    }
+};
 
 export default PageTransaction;
