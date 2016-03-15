@@ -3,28 +3,12 @@
  */
 import Query from '../Query.js';
 import GlobalStore from '../stores/GlobalStore.js';
+import TransactionAction from '../actions/TransactionAction.jsx';
+import TransactionStore from '../stores/TransactionStore.jsx';
 
 let { Button, Icon, DatePicker, Table, Transfer} = AntD;
 let { RangePicker } = DatePicker;
 
-var TransactionActions = Reflux.createActions([
-    'updateSelectedStations',
-    'updateStationList'
-]);
-
-var TransactionStore = Reflux.createStore({
-    selectedStationList: [],
-    stationList: [],
-    listenables: [TransactionActions],
-    onUpdateSelectedStations: function (selectedStationList,type) {
-        this.selectedStationList = selectedStationList;
-        this.trigger(selectedStationList,type);
-    },
-    onUpdateStationList: function (stationList,type) {
-        this.stationList = stationList;
-        this.trigger(stationList,type);
-    }
-});
 
 Date.prototype.format = function () {
     var y = this.getFullYear();
@@ -61,7 +45,6 @@ class PageTransaction extends React.Component {
                 refund_count: '',
                 refund_total: ''
             },
-            isAllChecked: false,
             stationList: TransactionStore.stationList,
             selectedStationList: TransactionStore.selectedStationList
         };
@@ -149,7 +132,7 @@ class PageTransaction extends React.Component {
 
     onUpdateStationInfo(info) {
         var stations = info.data.stations.map((item, idx)=>({station_id:item.station_id,name:item.name}));
-        TransactionActions.updateStationList(stations,1);
+        TransactionAction.updateStationList(stations,1);
     }
 
     goDetail(text, record) {
@@ -167,11 +150,10 @@ class PageTransaction extends React.Component {
     }
 
     selectAllHandler(ev) {
-        this.setState({isAllChecked: !this.state.isAllChecked});
-        if (!this.state.isAllChecked) {
-            TransactionActions.updateSelectedStations(this.state.stationList.map(item=>item.station_id),2);
+        if (this.refs.selectAll.checked) {
+            TransactionAction.updateSelectedStations(this.state.stationList.map(item=>item.station_id),2);
         } else {
-            TransactionActions.updateSelectedStations([],2);
+            TransactionAction.updateSelectedStations([],2);
         }
     }
 
@@ -182,7 +164,7 @@ class PageTransaction extends React.Component {
         } else {
             selectedStationList = selectedStationList.filter((item, index)=>(item != station_id))
         }
-        TransactionActions.updateSelectedStations(selectedStationList,2);
+        TransactionAction.updateSelectedStations(selectedStationList,2);
     }
     queryHandler() {
         if (this.state.selectedStationList.length==0) {
@@ -275,7 +257,8 @@ class PageTransaction extends React.Component {
         four_stations =
             (<ul className='fourStations'>
                 <li>油站：</li>
-                <li key='all'><label><input type='checkbox' name='checkAll' ref='select'
+                <li key='all'><label><input type='checkbox' name='checkAll' ref='selectAll'
+                                            checked = {this.state.selectedStationList.length>0 && this.state.selectedStationList.length === this.state.stationList.length}
                                             onChange={this.selectAllHandler.bind(this)}/>全选</label></li>
                 {
                     show_stations.map((item, idx)=>(
