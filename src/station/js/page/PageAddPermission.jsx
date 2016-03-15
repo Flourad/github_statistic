@@ -23,9 +23,17 @@ class PageAddPermission extends React.Component {
             stations: [],
         };
 
-        if (LoginStore.loginData.data && LoginStore.loginData.data.stations.length > 0) {
-            this.state.stations = LoginStore.loginData.data.stations;
-            console.debug('已经存在 stations=', this.state.stations);
+        var loginData= LoginStore.loginData.data.stations;
+
+        if ( loginData ) {
+            if( loginData.length > 0 ){
+                this.state.stations = LoginStore.loginData.data.stations;
+                console.debug('已经存在 stations=', this.state.stations);
+            }else{
+                LoginAction.updateLoginState();
+                LoginStore.listen(this.onUpdateLoginState.bind(this));
+            }
+
         } else {
             LoginAction.updateLoginState();
             LoginStore.listen(this.onUpdateLoginState.bind(this));
