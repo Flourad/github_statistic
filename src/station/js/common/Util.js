@@ -17,11 +17,10 @@ Util.formatDate = function (seconds) {
 Date.prototype.format = function () {
     var y = this.getFullYear();
     var m = bit_format(this.getMonth() + 1);
-    vard = bit_format(this.getDate());
+    var d = bit_format(this.getDate());
     var h = bit_format(this.getHours());
     var mins = bit_format(this.getMinutes());
     var secs = bit_format(this.getSeconds());
-
     return y + '-' + m + '-' + d + " " + h + ":" + mins + ':' + secs;
 }
 
