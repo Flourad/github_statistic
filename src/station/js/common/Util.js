@@ -14,4 +14,19 @@ Util.formatDate = function (seconds) {
     return date.toLocaleString('zh-Hans-CN', OPTIONS);
 };
 
+Date.prototype.format = function () {
+    var y = this.getFullYear();
+    var m = bit_format(this.getMonth() + 1);
+    vard = bit_format(this.getDate());
+    var h = bit_format(this.getHours());
+    var mins = bit_format(this.getMinutes());
+    var secs = bit_format(this.getSeconds());
+
+    return y + '-' + m + '-' + d + " " + h + ":" + mins + ':' + secs;
+}
+
+function bit_format(origin) {
+    return (origin > 9 ? origin : '0' + origin);
+}
+
 export default Util;
