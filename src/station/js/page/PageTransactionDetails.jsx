@@ -49,6 +49,10 @@ class PageTransactionDetails extends React.Component {
             }
 
         };
+        console.log(this.props.params.stationID);
+        console.log(this.props.params.orderID);
+        var stationID = this.props.params.stationID;
+        var ordreID = this.props.params.orderID;
     }
 
     getTransactionDetails() {
@@ -90,6 +94,7 @@ class PageTransactionDetails extends React.Component {
                 <section className='sec1-query'>
                     <div className='queryHeader'>订单详情</div>
                     <table className='queryContent'>
+                        <tbody>
                         <tr>
                             <td>订单号</td>
                             <td>{this.state.oilTransactionDetails.ID}</td>
@@ -114,16 +119,19 @@ class PageTransactionDetails extends React.Component {
                             <td></td>
                             <td></td>
                         </tr>
+                        </tbody>
                     </table>
                 </section>
                 <section className="sec2-oilstation">
                     <table cellSpacing="0" cellPadding='0'>
+                        <tbody>
                         <tr>
                             <td>油站</td>
                         </tr>
                         <tr>
                             <td>名称：<a href="">{this.state.oilstation}</a></td>
                         </tr>
+                        </tbody>
                     </table>
                 </section>
             </div>
