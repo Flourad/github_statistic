@@ -18,4 +18,6 @@ oilConst.reqAttendance = '/admin/Shift/query';
 
 oilConst.reqTransactionList = 'admin/Transaction/query';
 
+oilConst.reqTransactionInfo = '/admin/Order/info';
+
 window.oilConst = oilConst;
