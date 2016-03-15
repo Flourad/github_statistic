@@ -1,3 +1,5 @@
+@import "compass/css3";
+
 #pageTransaction {
 
   $background-color: #ffffff;
@@ -6,17 +8,13 @@
     padding-left: 22px;
     background-color: $background-color;
 
-
     .lookMore {
-      position:absolute;
-      bottom: 10px;
-      right: 20px;
+      padding: 8px 30px;
       text-align: center;
+      font-size: 16px;
       width: 100px;
       border: 1px solid #D9D9D9;
-      box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-
+      @include box-sizing(border-box);
     }
     .bottom_none {
       border-bottom: 0;
@@ -52,20 +50,41 @@
         tr {
           background-color: $background-color;
         }
+        span {
+          font-size: 15px;
+        }
         td {
+          font-size: 16px;
           padding-right: 20px;
         }
         .table-query-header {
           padding-top: 22px;
-          font-size: 14px;
         }
         .queryBtn {
           margin: 10px 0;
         }
+        .ant-btn-ghost:hover, .ant-btn-ghost:focus {
+          background-color: #ffffff;
+          border-color: #D9D9D9;
+        }
+        .ant-input {//RangePicker style rewrite
+          height: 1.4rem;
+          padding: 0.3rem 7px;
+          border-radius: 0;
+          font-size: 15px;
+        }
+        .ant-btn {
+          border-radius: 4px;
+          height: 1.4rem;
+          padding: 4px 18px;
+          font-size: 16px;
+          span {
+            font-size: 17px;
+          }
+        }
         .exportBtn {
-          .ant-btn:hover, .ant-btn:focus {
-            background-color: #ffffff;
-            border-color: #D9D9D9;
+          span {
+            font-size: 16px;
           }
         }
       }
@@ -73,7 +92,7 @@
         display: inline-block;
         margin-top: 10px;
         label{
-          font-size: 14px;
+          font-size: 15px;
         }
       }
       .fourStations li {
@@ -81,10 +100,29 @@
         margin-right: 20px;
       }
       .fourStations li:first-child {
-        font-size: 14px;
+        font-size: 15px;
         color: #999999;
         margin-right: 0;
       }
+
+      .moreStations {
+        position: relative;
+        display: inline-block;
+        margin-left: 68px;
+      }
+
+      .stationAmount {
+        font-size: 15px;
+      }
+
+    }
+    .orderIDInput {
+      width: 12.9rem;
+      margin: 10px 0;
+      height: 1.4rem;
+      line-height: 1.4rem;
+      font-size: 15px;
+      padding-left: 5px;
 
     }
   }
@@ -105,7 +143,7 @@
       height: 100%;
     }
     .sec2-text {
-      font-size: 14px;
+      font-size: 16px;
     }
     .sec2-num {
       font-size: 28px;
@@ -115,22 +153,41 @@
 
   .moreStationsList {
     position: absolute;
+    right: 0;
     z-index: 1000;
-    top: -10px;
-    right: 20px;
-    width: 500px;
-    height: 200px;
+    min-width: 20rem;
+    min-height: 8rem;
     background-color: $background-color;
     overflow-y: auto;
     border-left: 1px solid #D9D9D9;
     border-right:1px solid #D9D9D9;
     border-bottom: 1px solid #D9D9D9;
     overflow-x:hidden;
+
+    &:before {
+      content: " ";
+      position: absolute;
+      //width: 100%;
+      height: 1px;
+      border-top: 1px solid #D9D9D9;
+      left: 0;
+      top: 0;
+      right: 123px;
+    }
     
     .inputSearch {
-      width: 90%;
+      width: 95%;
       position: relative;
-      margin: 10px;
+      margin: 20px 10px 10px 15px;
+      height: 1.2rem;
+      line-height: 1.2rem;
+      padding-left: 10px;
+    }
+    .iconSearch {
+        position: absolute;
+        right: 20px;
+        top: 28px;
+        font-size: 15px;
     }
     ul {
       padding: 0;
@@ -140,9 +197,7 @@
       margin-top: 10px ;
       float: left;
       width: 33%;
-      font-size: 14px;
-      webkit-box-sizing: border-box ;
-      box-sizing: border-box;
+      @include box-sizing(border-box);
 
     }
     .clearFix {
@@ -159,8 +214,8 @@
 
     .borderTop {
       position: absolute;
-      left: -1px;
-      right: 98px;
+      left: 0;
+      right: 116px;
       border-top: 1px solid #D9D9D9;
 
     }
@@ -176,9 +231,10 @@
       zoom: 1;
       border: 1px solid #d9d9d9;
       background-color: white;
+      @include box-shadow( 4px 1px 10px #A1A1A1);
     }
     .ant-table {
-      font-size: 14px;
+      font-size: 15px;
     }
     .total_records {
       position: absolute;

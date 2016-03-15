@@ -2,9 +2,10 @@
  * Created by danyu on 3/7/16.
  */
 import Query from '../Query.js';
-import GlobalStore from '../stores/GlobalStore.js';
 import TransactionAction from '../actions/TransactionAction.jsx';
 import TransactionStore from '../stores/TransactionStore.jsx';
+import LoginStore from '../stores/GlobalStore';
+import LoginAction from '../actions/GlobalAction';
 
 let { Button, Icon, DatePicker, Table, Transfer} = AntD;
 let { RangePicker } = DatePicker;
@@ -57,7 +58,7 @@ class PageTransaction extends React.Component {
                 key: 'num',
                 render(text, record, index) {
                     return (
-                        <span>{index + 1}</span>
+                        <span key={index}>{index+1}</span>
                     )
                 }
             }, {
@@ -79,7 +80,7 @@ class PageTransaction extends React.Component {
                 key: 'type',
                 render(text, record, index) {
                     return (
-                        <span>{text === '1' ? '收款' : '退款'}</span>
+                        <span key={index}>{text === '1' ? '收款' : '退款'}</span>
                     )
                 }
             }, {
@@ -93,18 +94,18 @@ class PageTransaction extends React.Component {
                 render(text, record, index) {
                     var d = new Date(text * 1000);
                     return (
-                        <span>{d.format()}</span>
+                        <span  key={index}>{d.format()}</span>
                     )
                 }
             }];
 
         TransactionStore.listen(this.onUpdateStations.bind(this));
-        GlobalStore.listen(this.onUpdateStationInfo.bind(this));
 
-        if(GlobalStore.loginData.data.stations) {//处理从其它页面跳转的情况
-            TransactionStore.stationList = GlobalStore.loginData.data.stations.map((item, idx)=>({station_id:item.station_id,name:item.name}));
-            var stations = TransactionStore.stationList.map(item=>item.station_id);
-            this.getTransactionList(this.state.pagination.size, this.state.pagination.current,stations);
+        if(LoginStore.loginData.data.stations&& LoginStore.loginData.data.stations.length > 0) {
+            TransactionStore.stationList = LoginStore.loginData.data.stations.map((item, idx)=>({station_id:item.station_id,name:item.name}));
+        } else {
+            LoginAction.updateLoginState();
+            LoginStore.listen(this.onUpdateStationInfo.bind(this));
         }
     }
 
@@ -142,11 +143,10 @@ class PageTransaction extends React.Component {
 
 
     componentWillMount() {
-        //if (TransactionStore.stationList&&TransactionStore.stationList.length>0) {
-        //    const isFirstQuery = true;
-        //    this.getTransactionList(this.state.pagination.size, this.state.pagination.current,isFirstQuery);
-        //}
-
+        if (TransactionStore.stationList  && TransactionStore.stationList.length>0) {
+            var stations = TransactionStore.stationList.map(item=>item.station_id);
+            this.getTransactionList(this.state.pagination.size, this.state.pagination.current,stations);
+        }
     }
 
     selectAllHandler(ev) {
@@ -278,11 +278,11 @@ class PageTransaction extends React.Component {
                         <table className='table-query' cellSpacing="0" cellPadding='0'>
                             <tbody>
                             <tr>
-                                <td className="table-query-header">订单号</td>
+                                <td className="table-query-header">订单号：</td>
                                 <td className="table-query-header">时间：</td>
                             </tr>
                             <tr>
-                                <td><input type='text' style={{width:'15rem',margin:'10px 0'}} ref='orderID'></input>
+                                <td><input type='text' className='orderIDInput' ref='orderID'></input>
                                 </td>
                                 <td><RangePicker style={{ width: 400,margin:'10px 0' }} showTime
                                                  format="yyyy/MM/dd HH:mm:ss" ref='time'/></td>
@@ -293,11 +293,8 @@ class PageTransaction extends React.Component {
                             </tbody>
                         </table>
                         {four_stations}
-                        <div className='stationsSec'>
-                            {
-                                more_stations?<QueryMore moreStations = {more_stations} singleSelected={this.selectSingle}/>:''
-                            }
-                        </div>
+                        {more_stations?<QueryMore moreStations = {more_stations} singleSelected={this.selectSingle}/>:''}
+                        <div className='stationAmount'>选择油站数量：{this.state.selectedStationList.length}</div>
                     </div>
                 </section>
                 <section className='sec2-statistic'>
@@ -325,7 +322,7 @@ class PageTransaction extends React.Component {
                     </table>
                 </section>
                 <section className='sec3-table'>
-                    <Table rowKey={this.getRowKey.bind(this)} columns={this.columns} dataSource={this.state.dataSource} loading={this.state.loading}
+                    <Table useFixedHeader rowKey={this.getRowKey.bind(this)} columns={this.columns} dataSource={this.state.dataSource} loading={this.state.loading}
                            pagination={this.state.pagination} onChange={this.handleTableChange.bind(this)}/>
                     <span className='total_records'>共 <i style={{color:"red"}}>{this.state.total}</i> 条记录</span>
                 </section>
@@ -360,6 +357,7 @@ class QueryMore extends React.Component {
     }
 
     showMore() {
+        this.setState({searchResult:undefined});
         this.setState({isShowMore: this.state.isShowMore ? false : true});
     }
 
@@ -373,13 +371,13 @@ class QueryMore extends React.Component {
         const showStations = this.state.searchResult?this.state.searchResult:this.props.moreStations;
         const name = this.state.isShowMore?'bottom_none':'';
         return (
-            <div>
+            <div className='moreStations'>
                 <span className={'lookMore'+' '+name} onClick={this.showMore.bind(this)}>查看更多<i className='icon-look_up'></i></span>
                 {
                     this.state.isShowMore ? (
                         <div className='moreStationsList'>
-                            <div className="borderTop"></div>
-                            <input type='text' placeholder='搜索' className='inputSearch' ref='searchInput' onChange={this.searchInput.bind(this,this.props.moreStations)}/>
+                            <input type='text' placeholder='请输入油站名称' className='inputSearch' ref='searchInput' onChange={this.searchInput.bind(this,this.props.moreStations)}/>
+                            <Icon className='iconSearch' type="search"/>
                             <ul className='clearFix'>
                                 {
                                     showStations.map((item,idx) =>
