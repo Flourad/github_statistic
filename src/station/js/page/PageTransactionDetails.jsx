@@ -6,33 +6,6 @@ import Query from '../Query.js'
 let { Button, Icon, DatePicker, Row, Col, Table} = AntD;
 let { RangePicker } = DatePicker;
 
-const data = [{
-    orderID: 145743448459814939,
-    type: '已取消',
-    time: '2016-2-1 15:01:10',
-    money: 200,
-    oilGun: '1',
-    oilNum: '92#',
-    carNum: '京N43223'
-}];
-
-Date.prototype.format = function () {
-    var y = this.getFullYear();
-    var m = bit_format(this.getMonth() + 1);
-    var d = bit_format(this.getDate());
-    var h = bit_format(this.getHours());
-    var mins = bit_format(this.getMinutes());
-    var secs = bit_format(this.getSeconds());
-
-    return y + '-' + m + '-' + d + " " + h + ":" + mins + ':' + secs;
-}
-
-function bit_format(origin) {
-    return (origin > 9 ? origin : '0' + origin);
-}
-
-
-
 class PageTransactionDetails extends React.Component {
     constructor(props) {
         super(props);
@@ -46,27 +19,38 @@ class PageTransactionDetails extends React.Component {
                 ganNum: '',
                 oilNum: '',
                 carNum: ''
-            }
-
+            },
+            stationID: this.props.params.stationID,
+            ordreID: this.props.params.orderID
+            //stationID: 8,
+            //ordreID: 145619762930896433
         };
         console.log(this.props.params.stationID);
         console.log(this.props.params.orderID);
-        var stationID = this.props.params.stationID;
-        var ordreID = this.props.params.orderID;
+
+        this.getTransactionDetails();
     }
 
+    //componentWillMount() {
+    //    //this.getTransactionDetails();
+    //}
+
     getTransactionDetails() {
-        var order_id = this.refs.orderID?this.refs.orderID.value:'';
-        var station_id = this.refs.stationID?this.refs.stationID.value:'';
+        var order_id = this.state.ordreID?this.state.stationID.value:'';
+        var station_id = this.state.stationID?this.state.stationID.value:'';
 
         var reqData = {
-            order_id: order_id,
-            station_id: station_id
+            order_id: this.state.ordreID,
+            station_id: this.state.stationID
         };
 
+        console.log('zszs');
         this.setState({loading: true});
+        console.log('zengruofan1',reqData);
         Query.get(oilConst.reqTransactionInfo, reqData, function(data) {
+            console.log('zengruofan2',reqData);
             this.setState({loading: false});
+            console.log('取得订单详情:', data.data);
             if (data && data.data) {
                 console.log('取得订单详情:', data.data);
                 this.setState({oilstation: data.data.oil_station_name});
@@ -74,14 +58,13 @@ class PageTransactionDetails extends React.Component {
                     oilTransactionDetails: {
                         ID: data.data.order_id,
                         status: data.data.status,
-                        time: new Data(data.data.pay_time).format(),
+                        time: new Date(data.data.pay_time*1000).format(),
                         money: data.data.total_amount,
                         ganNum: data.data.gun_no,
                         oilNum: data.data.oil_no,
                         carNum: data.data.car_no
                     }
                 });
-
             } else {
                 console.log('订单详情为空');
             }
