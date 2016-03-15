@@ -62,8 +62,11 @@ Query.req = function (type, url, data, callBack, onErrorResponse) {
                 window.location.href ='https://passport.rdtest.baidu.com/v2/?login&tpl=map_car&u=' + window.location.host;
 
             } else {
-                onErrorResponse(data);
-                alert(data.errstr);
+                if (onErrorResponse) {
+                    onErrorResponse(data);
+                } else {
+                    alert(data.errstr);
+                }
             }
         },
         error: function (e) {

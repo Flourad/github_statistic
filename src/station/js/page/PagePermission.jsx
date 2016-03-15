@@ -3,7 +3,8 @@
  */
 
 import Query from '../Query.js';
-let { Button, Icon, Table } =AntD;
+let { Button, Icon, Table, Modal, message } =AntD;
+let { confirm } = Modal;
 
 class PagePermission extends React.Component {
     constructor(props) {
@@ -12,14 +13,13 @@ class PagePermission extends React.Component {
         this.state = {
             dataSource: undefined,
             total: 0,
-            pagination:{
+            pagination: {
                 // 当前页
                 current: 1,
                 // 每页显示的条数
-                size:10
+                size: 10
             },
-            loading:false
-
+            loading: false
         };
 
         var me = this;
@@ -53,16 +53,16 @@ class PagePermission extends React.Component {
     }
 
     componentWillMount() {
-        this.getOperatorList(this.state.pagination.size,this.state.pagination.current);
+        this.getOperatorList(this.state.pagination.size, this.state.pagination.current);
     }
 
     /**
      * 取得操作员列表信息
      *
      */
-    getOperatorList(size,page) {
+    getOperatorList(size, page) {
         // 取得操作员列表信息
-        var reqData={size:size,page:page};
+        var reqData = {size: size, page: page};
         this.setState({loading: true});
         Query.get(oilConst.reqOperatorList, reqData, function (data) {
             this.setState({loading: false});
@@ -70,7 +70,7 @@ class PagePermission extends React.Component {
                 console.log('取得操作员列表信息:', data.data.items);
                 this.setState({dataSource: data.data.items});
                 this.setState({total: data.data.page.total});
-                this.setState({pagination:{total:data.data.page.total}});
+                this.setState({pagination: {total: data.data.page.total}});
             } else {
                 console.log('取得操作员列表为空');
             }
@@ -100,21 +100,29 @@ class PagePermission extends React.Component {
      */
     delHandler(text, record) {
         console.debug('删除:', record);
+        var me=this;
 
-        var reqData = {id: record.id, station_id: record.station_id};
-        Query.post(oilConst.reqOperateDelete, reqData, function (data) {
-            console.log('删除成功');
-            this.getOperatorList(this.state.pagination.size,1);
-            var pager={};
-            pager.current = 1;
-            pager.size = 10;
+        confirm({
+            title: '您是否确认要删除这项内容',
+            content: '',
+            onOk() {
+                var reqData = {id: record.id, station_id: record.station_id};
+                Query.post(oilConst.reqOperateDelete, reqData, function (data) {
+                    console.log('删除成功');
+                    me.getOperatorList(me.state.pagination.size, 1);
+                    var pager = {};
+                    pager.current = 1;
+                    pager.size = 10;
 
-            this.setState({
-                pagination: pager
-            });
-            console.log(this.state.pagination);
-            alert('删除成功');
-        }.bind(this));
+                    me.setState({
+                        pagination: pager
+                    });
+
+                    message.success('删除成功');
+                });
+            },
+            onCancel() {}
+        });
     }
 
     /**
@@ -129,6 +137,21 @@ class PagePermission extends React.Component {
         this.context.router.push(url);
     }
 
+    /**
+     * 删除确认窗口 取消
+     */
+    handleModalCancel() {
+
+    }
+
+    /**
+     * 删除确认窗口 确定
+     *
+     */
+    handleModalOk() {
+
+    }
+
     render() {
         return (
             <div id="pagePermission">
@@ -140,15 +163,17 @@ class PagePermission extends React.Component {
                     </Button>
                 </div>
                 <div className="pagePermission_Table">
-                    <Table useFixedHeader rowKey={this.getRowKey.bind(this)} columns={this.columns} dataSource={this.state.dataSource}
-                           loading={this.state.loading}  pagination={this.state.pagination} onChange={this.handleTableChange.bind(this)}/>
+                    <Table useFixedHeader rowKey={this.getRowKey.bind(this)} columns={this.columns}
+                           dataSource={this.state.dataSource}
+                           loading={this.state.loading} pagination={this.state.pagination}
+                           onChange={this.handleTableChange.bind(this)}/>
                     <label className="dataTotal">共 <i style={{color:"red"}}>{this.state.total}</i> 条记录</label>
                 </div>
             </div>
         );
     }
 
-    handleTableChange(pagination){
+    handleTableChange(pagination) {
         const pager = this.state.pagination;
         pager.current = pagination.current;
         pager.size = 10;
@@ -157,7 +182,7 @@ class PagePermission extends React.Component {
             pagination: pager
         });
 
-        this.getOperatorList( pager.size ,pager.current);
+        this.getOperatorList(pager.size, pager.current);
     }
 }
 

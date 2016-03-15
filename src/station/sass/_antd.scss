@@ -2304,9 +2304,9 @@ fieldset[disabled] .ant-btn-primary.active {
 }
 .ant-btn-ghost:hover,
 .ant-btn-ghost:focus {
-  color: #858585;
-  background-color: #ffffff;
-  border-color: #e1e1e1;
+  color: #858585 !important;
+  background-color: #ffffff !important;
+  border-color: #e1e1e1 !important;
 }
 .ant-btn-ghost:active,
 .ant-btn-ghost.active {
