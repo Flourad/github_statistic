@@ -1,8 +1,5 @@
-// 加载compass sprites模块
 @import "compass/utilities/sprites";
-// 导入icon目录下所有png图片
 @import "icon/*.png";
-// 输出所有的雪碧图css
 @include all-icon-sprites;
 
 //$icon-spacing: 19px;
