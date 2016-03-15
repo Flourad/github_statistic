@@ -71,8 +71,10 @@ class AttendanceStats extends React.Component {
     }
 
     fetch(params = {}) {
-        this.setState({loading: true});
-        Query.get(oilConst.reqAttendance, params, this.parseData, this.handleError);
+        if (params.station_id) {
+            this.setState({loading: true});
+            Query.get(oilConst.reqAttendance, params, this.parseData, this.handleError);
+        }
     }
 
     parseData(result) {

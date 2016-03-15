@@ -7,9 +7,11 @@ class AttendanceSelect extends React.Component {
         super(props);
 
         this.children = [];
-        props.data.forEach(function (station) {
-            this.children.push(<Option key={station.station_id}>{station.name}</Option>);
-        }.bind(this));
+        if (props.data) {
+            props.data.forEach(function (station) {
+                this.children.push(<Option key={station.station_id}>{station.name}</Option>);
+            }.bind(this));
+        }
 
         this.onStartTimeChange = this.onStartTimeChange.bind(this);
         this.onEndTimeChange = this.onEndTimeChange.bind(this);
@@ -47,7 +49,10 @@ class AttendanceSelect extends React.Component {
                     <span style={{marginLeft:'302px'}}>时间 :</span>
                 </div>
                 <div className='attendanceSelectBody'>
-                    <Select style={{ width: '300px',marginRight:'30px',fontSize: '14px'}} placeholder="请选择油站" onChange={this.onStationChange}>
+                    <Select style={{ width: '300px',marginRight:'30px',fontSize: '14px'}}
+                        placeholder="请选择油站"
+                        onChange={this.onStationChange}
+                        defaultValue={this.props.data ? this.props.data[0].name : ''}>
                         {this.children}
                     </Select>
                     <DatePicker onChange={this.onStartTimeChange} placeholder="开始日期"
