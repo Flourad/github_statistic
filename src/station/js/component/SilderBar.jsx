@@ -50,7 +50,7 @@ class SilderBar extends React.Component {
                     <label className="menuGroup">{this.constText.operate}</label>
                     <Menu mode="vertical" theme="dark">
                         <Menu.Item>
-                            <Link to='/#/c'>
+                            <Link to='pageextend'>
                                 <i className="iconImage icon-opexpand"></i>
                                 <label className='usertext'>{this.constText.opExpand}</label>
                                 <i className="iconArrow icon-arrow"></i>
