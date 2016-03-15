@@ -136,8 +136,8 @@ class PageTransaction extends React.Component {
     }
 
     goDetail(text, record) {
-        //var data = {data: record};
-        //var url = {pathname: 'transactionDetail', state: {data}};
+        console.log(record);
+        this.context.router.push(`pageTransactionDetail/${record.station_id}/${record.order_id}`);
     }
 
 
