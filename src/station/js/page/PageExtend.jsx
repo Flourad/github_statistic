@@ -9,7 +9,19 @@ import Query from '../Query.js';
 
 let { Button, Icon, DatePicker, Table, Select} =AntD;
 let { RangePicker } = DatePicker;
-const Option = Select.option;
+const Option = Select.Option;
+
+var ExtendAction = Reflux.createActions([
+    'updateStationList'
+]);
+var ExtendStore = Reflux.createStore({
+    stationList: [],
+    listenables: [ExtendAction],
+    onUpdateStationList: function (stationList) {
+        this.stationList = stationList;
+        this.trigger(stationList);
+    }
+});
 
 class PageExtend extends React.Component {
     constructor(props) {
@@ -22,13 +34,38 @@ class PageExtend extends React.Component {
                 size: 10
             },
             stationId: '',
-            stations: [],
+            stations: ExtendStore.stationList,
+            stationName: '',
+            defaultSelect: '',
             loading: false
         };
 
+        ExtendStore.listen(this.updateSelect.bind(this));
+
+        var loginData= LoginStore.loginData.data.stations;
+
+        if ( loginData ) {
+            if( loginData.length > 0 ){
+                ExtendStore.stationList = LoginStore.loginData.data.stations;
+                ExtendAction.updateStationList(LoginStore.loginData.data.stations);
+                //this.setState({defaultSelect:ExtendStore.stationList[0].name});
+                this.state.stations = LoginStore.loginData.data.stations;
+                console.debug('已经存在 stations=', this.state.stations);
+            }else{
+                LoginAction.updateLoginState();
+                LoginStore.listen(this.onUpdateLoginState.bind(this));
+            }
+
+        } else {
+            LoginAction.updateLoginState();
+            LoginStore.listen(this.onUpdateLoginState.bind(this));
+        }
+
+
+
         this.columns = [
             {
-                title: '序号',
+                title: '序号777',
                 dataIndex: 'num',
                 key: 'num',
                 render(text, record, index){
@@ -77,14 +114,12 @@ class PageExtend extends React.Component {
                     )
                 }
             }];
-        if (LoginStore.loginData.data && LoginStore.loginData.data.stations &&LoginStore.loginData.data.stations.length > 0) {
-            this.state.stations = LoginStore.loginData.data.stations;
-            console.debug('已经存在 stations=', this.state.stations);
-        } else {
-            LoginAction.updateLoginState();
-            LoginStore.listen(this.onUpdateLoginState.bind(this));
-        }
 
+
+    }
+
+    updateSelect(stationList){
+        this.setState({stations: stationList});
     }
 
     /**
@@ -94,12 +129,16 @@ class PageExtend extends React.Component {
      */
     onUpdateLoginState(data) {
         console.debug('重新获取的', data.data.stations);
-        this.setState({stations: data.data.stations});
+        //this.setState({stations: data.data.stations});
+        ExtendStore.stationList = data.data.stations;
+        ExtendAction.updateStationList(data.data.stations);
+        this.setState({defaultSelect:ExtendStore.stationList[0].name});
+
         this.getExtendList(10,1,data.data.stations[0].station_id);
     }
 
     /**
-     * 取得操作员列表信息
+     * 取得扩展列表信息
      *
      */
     getExtendList(size,page,station) {
@@ -133,8 +172,10 @@ class PageExtend extends React.Component {
     }
 
     componentDidMount() {
-        if(this.state.stationId){
-            this.getExtendList(10,1,this.state.stationId);
+        if(this.state.stations.length){
+            this.getExtendList(10,1,this.state.stations[0].station_id);
+            this.setState({defaultSelect:ExtendStore.stationList[0].name});
+
         }
 
     }
@@ -172,11 +213,13 @@ class PageExtend extends React.Component {
      */
     stationChange(value, label) {
         this.setState({stationId: value});
+        this.setState({defaultSelect: label});
+
     }
 
     render() {
         let optionArray = [];
-        if (this.state.stations) {
+        if (this.state.stations && this.state.stations.length > 0 ) {
             let stationInfo = this.state.stations;
             for (let i = 0; i < stationInfo.length; i++) {
                 let optionDom = (<Option key={stationInfo[i].station_id}
@@ -191,6 +234,7 @@ class PageExtend extends React.Component {
                 <div className='queryHeader'>推广效果分析</div>
                 <section className="attendanceSelect">
                     <table>
+                        <tbody>
                         <tr>
                             <td>
                                 <label>油站 :</label>
@@ -202,7 +246,7 @@ class PageExtend extends React.Component {
                         </tr>
                         <tr>
                             <td>
-                                <Select ref='selStation' defaultValue={this.state.stationId} style={{ width: 316 }}
+                                <Select ref='selStation' value={this.state.defaultSelect} style={{ width: 316 }}
                                         onChange={this.stationChange.bind(this)}>
                                     {optionArray}
                                 </Select>
@@ -215,6 +259,7 @@ class PageExtend extends React.Component {
                                 <Button type='primary'  onClick={this.toQuery.bind(this)} className="queryBtn"><Icon type="search"/>查询</Button>
                             </td>
                         </tr>
+                        </tbody>
                     </table>
                 </section>
                 <section className="data-table">
