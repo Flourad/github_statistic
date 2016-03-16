@@ -40,6 +40,7 @@ class PageTransaction extends React.Component {
                 title: '序号',
                 dataIndex: 'num',
                 key: 'num',
+                width: 200,
                 render(text, record, index) {
                     return (
                         <span key={index}>{index+1}</span>
@@ -49,6 +50,7 @@ class PageTransaction extends React.Component {
                 title: '订单号',
                 dataIndex: 'order_id',
                 key: 'order_id',
+                width: 300,
                 render(text, record, index) {
                     return (
                         <a onClick={me.goDetail.bind(me,text,record)}>{text}</a>
@@ -57,10 +59,12 @@ class PageTransaction extends React.Component {
             }, {
                 title: '油站',
                 dataIndex: 'name',
-                key: 'name'
+                key: 'name',
+                width: 300
             }, {
                 title: '交易类型',
                 dataIndex: 'type',
+                width:200,
                 key: 'type',
                 render(text, record, index) {
                     return (
@@ -70,7 +74,8 @@ class PageTransaction extends React.Component {
             }, {
                 title: '金额',
                 dataIndex: 'amount',
-                key: 'amount'
+                key: 'amount',
+                width: 200
             }, {
                 title: '时间',
                 dataIndex: 'create_time',
@@ -113,8 +118,8 @@ class PageTransaction extends React.Component {
             console.log('updateStationList');
             this.setState({stationList:stations});
             TransactionStore.stationList = stations;
-            var stations = this.state.stationList.map(item=>item.station_id);
-            this.getTransactionList(this.state.pagination.size, this.state.pagination.current,stations);
+            var stationIDList = stations.map(item=>item.station_id);
+            this.getTransactionList(this.state.pagination.size, this.state.pagination.current,stationIDList);
         } else if(type===2) {
             console.log('updateSelectedStations');
             this.setState({selectedStationList: stations});
@@ -177,7 +182,7 @@ class PageTransaction extends React.Component {
     }
 
     queryHandler() {//查询
-        if (this.state.selectedStationList.length==0) {
+        if (this.state.selectedStationList.length===0) {
             this.alertMessage('选择油站不能为空哦，请重新选择~');
             return false;
         }
@@ -192,7 +197,7 @@ class PageTransaction extends React.Component {
     }
 
     exportTransaction() {//导出excel
-        if (this.state.selectedStationList.length==0) {
+        if (this.state.selectedStationList.length===0) {
             this.alertMessage('选择油站不能为空哦，请重新选择~');
             return false;
         }
@@ -230,16 +235,14 @@ class PageTransaction extends React.Component {
     }
 
     render() {
-        var four_stations = '';
-        var stations = TransactionStore.stationList;
-        var show_stations = stations;
+        var show_stations = TransactionStore.stationList;
         var more_stations = '';
-        if (stations.length > 4) {
-            show_stations = stations.slice(0, 4);
-            more_stations = stations.slice(4, stations.length);
+        if (TransactionStore.stationList.length > 4) {
+            show_stations = TransactionStore.stationList.slice(0, 4);
+            more_stations = TransactionStore.stationList.slice(4, TransactionStore.stationList.length);
         }
 
-        four_stations =
+        var four_stations = show_stations.length>0 ?
             (<ul className='fourStations'>
                 <li>油站：</li>
                 <li key='all'><label><input type='checkbox' name='checkAll' ref='selectAll'
@@ -253,7 +256,7 @@ class PageTransaction extends React.Component {
                                                     name='station' value={item.station_id}/>{item.name}</label></li>
                     ))
                 }
-            </ul>)
+            </ul>):'';
 
         return (
             <div id="pageTransaction">
