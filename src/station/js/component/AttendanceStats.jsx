@@ -155,7 +155,9 @@ const columns = [
         title: '上班时间',
         dataIndex: 'signin_time',
         render(text) {
-            return Util.formatDate(text);
+            let date = new Date();
+            date.setTime(text * 1000);
+            return date.format();
         }
     },
     {
@@ -163,7 +165,9 @@ const columns = [
         title: '下班时间',
         dataIndex: 'offwork_time',
         render(text) {
-            return Util.formatDate(text);
+            let date = new Date();
+            date.setTime(text * 1000);
+            return date.format();
         }
     }
 ];
