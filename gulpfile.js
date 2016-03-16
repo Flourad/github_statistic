@@ -213,46 +213,6 @@ gulp.task('buildreleasejs', function () {
         .pipe(gulp.dest(dest + 'static/js/'));
 });
 
-gulp.task('buildzipreleasejs', function () {
-    var files = getFileList('src/station/js');
-
-    return browserify({
-        entries: files
-    })
-        .transform(babelify)
-        .bundle()
-        .on('error', function (err) {
-            console.log(err.message);
-            this.emit('end');
-        })
-        .pipe(source('app.js'))
-        .pipe(replace('Const.USE_OFFLINE_CACHE = false', 'Const.USE_OFFLINE_CACHE = true'))
-        .pipe(buffer())
-        .pipe(stripDebug())
-        .pipe(uglify())
-        .pipe(gulp.dest(dest + 'static/js/'));
-});
-
-gulp.task('buildmockjs', function () {
-    var files = getFileList('src/station/js');
-
-    return watchify(browserify({
-        entries: files
-    })
-        .transform(babelify)
-        .bundle()
-        .on('error', function (err) {
-            console.log(err.message);
-            this.emit('end');
-        })
-
-        .pipe(source('app.js'))
-        .pipe(replace('carlife://', '/mock/'))
-        .pipe(replace("NATIVE_COMM_TAG = 'iframe'", "NATIVE_COMM_TAG = 'script'"))
-        .pipe(buffer())
-        .pipe(gulp.dest(dest + 'static/js/')));
-});
-
 gulp.task('compass', function (cb) {
 
     return exec('compass compile', function (err) {
@@ -283,17 +243,7 @@ gulp.task('watchjs', function () {
     gulp.watch("src/station/js/**/*", ["buildjs"]);
 });
 
-gulp.task('watchmockjs', function () {
-    gulp.watch("src/station/js/**/*", ["buildmockjs"]);
-});
-
 gulp.task('buildall', ['copy', 'buildlib', 'buildjs', 'compass'], function () {
-});
-
-gulp.task('zip', ['copy', 'buildlib', 'buildzipreleasejs', 'compass'], function () {
-    return gulp.src(root + '/**')
-        .pipe(zip('web.zip'))
-        .pipe(gulp.dest(root));
 });
 
 gulp.task('buildrelease', ['copy', 'buildlib', 'buildreleasejs', 'compass'], function () {
@@ -303,6 +253,3 @@ gulp.task('default', ['buildall', 'watchjs', 'server']);
 
 gulp.task('release', ['buildrelease', 'watchjs', 'server']);
 
-gulp.task('mock', ['copy', 'buildlib', 'buildmockjs', 'compass', 'watchmockjs', 'server'], function () {
-
-});
