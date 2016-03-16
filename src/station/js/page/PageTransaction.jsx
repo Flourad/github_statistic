@@ -40,7 +40,7 @@ class PageTransaction extends React.Component {
                 title: '序号',
                 dataIndex: 'num',
                 key: 'num',
-                width: 200,
+                width: 100,
                 render(text, record, index) {
                     return (
                         <span key={index}>{index+1}</span>
@@ -50,7 +50,7 @@ class PageTransaction extends React.Component {
                 title: '订单号',
                 dataIndex: 'order_id',
                 key: 'order_id',
-                width: 300,
+                width: 200,
                 render(text, record, index) {
                     return (
                         <a onClick={me.goDetail.bind(me,text,record)}>{text}</a>
@@ -60,7 +60,7 @@ class PageTransaction extends React.Component {
                 title: '油站',
                 dataIndex: 'name',
                 key: 'name',
-                width: 300
+                width: 200
             }, {
                 title: '交易类型',
                 dataIndex: 'type',
@@ -75,7 +75,7 @@ class PageTransaction extends React.Component {
                 title: '金额',
                 dataIndex: 'amount',
                 key: 'amount',
-                width: 200
+                width: 100
             }, {
                 title: '时间',
                 dataIndex: 'create_time',
@@ -281,7 +281,7 @@ class PageTransaction extends React.Component {
                             </tbody>
                         </table>
                         {four_stations}
-                        {more_stations?<QueryMore moreStations = {more_stations} singleSelected={this.selectSingleHandler}/>:''}
+                        {more_stations?<LookMore moreStations = {more_stations} singleSelected={this.selectSingleHandler}/>:''}
                         <p className='stationAmount'>选择油站数量：{this.state.selectedStationList.length}</p>
                     </div>
                 </section>
@@ -335,7 +335,7 @@ class PageTransaction extends React.Component {
     }
 }
 
-class QueryMore extends React.Component {
+class LookMore extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
