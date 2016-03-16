@@ -13,13 +13,13 @@ class PageTransactionDetails extends React.Component {
             oilstation: '',
             oilTransactionDetails: {
                 ID: '',
-                status: '',
                 time: '',
                 money: '',
                 ganNum: '',
                 oilNum: '',
                 carNum: ''
             },
+            status: '',
             stationID: this.props.params.stationID,
             ordreID: this.props.params.orderID
             //stationID: 8,
@@ -44,11 +44,7 @@ class PageTransactionDetails extends React.Component {
             station_id: this.state.stationID
         };
 
-        console.log('zszs');
-        this.setState({loading: true});
-        console.log('zengruofan1',reqData);
         Query.get(oilConst.reqTransactionInfo, reqData, function(data) {
-            console.log('zengruofan2',reqData);
             this.setState({loading: false});
             console.log('取得订单详情:', data.data);
             if (data && data.data) {
@@ -57,7 +53,6 @@ class PageTransactionDetails extends React.Component {
                 this.setState( {
                     oilTransactionDetails: {
                         ID: data.data.order_id,
-                        status: data.data.status,
                         time: new Date(data.data.pay_time*1000).format(),
                         money: data.data.total_amount,
                         ganNum: data.data.gun_no,
@@ -65,10 +60,49 @@ class PageTransactionDetails extends React.Component {
                         carNum: data.data.car_no
                     }
                 });
+                this.getDetailsStatus(data.data.status);
             } else {
                 console.log('订单详情为空');
             }
         }.bind(this));
+    }
+
+    getDetailsStatus(status){
+        switch (status){
+            case '1':
+                this.setState({status: '待支付'});
+                break;
+            case '2':
+                this.setState({status: '支付成功'});
+                break;
+            case '3':
+                this.setState({status: '支付失败'});
+                break;
+            case '4':
+                this.setState({status: '已完成'});
+                break;
+            case '5':
+                this.setState({status: '退款处理中'});
+                break;
+            case '6':
+                this.setState({status: '退款成功'});
+                break;
+            case '7':
+                this.setState({status: '退款失败'});
+                break;
+            case '8':
+                this.setState({status: '退款被拒绝'});
+                break;
+            case '9':
+                this.setState({status: '退款已同意'});
+                break;
+            case '10':
+                this.setState({status: '退款进行中'});
+                break;
+            case '11':
+                this.setState({status: '已取消'});
+                break;
+        }
     }
 
     render() {
@@ -82,7 +116,7 @@ class PageTransactionDetails extends React.Component {
                             <td>订单号</td>
                             <td>{this.state.oilTransactionDetails.ID}</td>
                             <td>订单状态</td>
-                            <td>{this.state.oilTransactionDetails.status}</td>
+                            <td>{this.state.status}</td>
                         </tr>
                         <tr>
                             <td>下单时间</td>
