@@ -7,7 +7,7 @@ import TransactionStore from '../stores/TransactionStore.jsx';
 import LoginStore from '../stores/GlobalStore';
 import LoginAction from '../actions/GlobalAction';
 
-let { Button, Icon, DatePicker, Table, Transfer} = AntD;
+let { Button, Icon, DatePicker, Table, Transfer, Modal} = AntD;
 let { RangePicker } = DatePicker;
 
 class PageTransaction extends React.Component {
@@ -25,10 +25,10 @@ class PageTransaction extends React.Component {
             },
             loading: false,
             statistic_info: {
-                pay_count: '',
-                pay_total: '',
-                refund_count: '',
-                refund_total: ''
+                pay_count: 0,
+                pay_total: 0,
+                refund_count: 0,
+                refund_total: 0
             },
             stationList: TransactionStore.stationList,
             selectedStationList: TransactionStore.selectedStationList
@@ -89,7 +89,7 @@ class PageTransaction extends React.Component {
             TransactionStore.stationList = LoginStore.loginData.data.stations.map((item, idx)=>({station_id:item.station_id,name:item.name}));
         } else {
             LoginAction.updateLoginState();
-            LoginStore.listen(this.onUpdateStationInfo.bind(this));
+            LoginStore.listen(this.onUpdateLoginStationInfo.bind(this));
         }
     }
 
@@ -101,6 +101,11 @@ class PageTransaction extends React.Component {
      */
     getRowKey(record) {
         return record.id;
+    }
+
+    onUpdateLoginStationInfo(info) {
+        var stations = info.data.stations.map((item, idx)=>({station_id:item.station_id,name:item.name}));
+        TransactionAction.updateStationList(stations,1);
     }
 
     onUpdateStations(stations,type) {
@@ -116,75 +121,15 @@ class PageTransaction extends React.Component {
         }
     }
 
-    onUpdateStationInfo(info) {
-        var stations = info.data.stations.map((item, idx)=>({station_id:item.station_id,name:item.name}));
-        TransactionAction.updateStationList(stations,1);
-    }
-
-    goDetail(text, record) {
-        console.log(record);
-        this.context.router.push(`pageTransactionDetail/${record.station_id}/${record.order_id}`);
-    }
-
-
-    componentWillMount() {
-        if (TransactionStore.stationList  && TransactionStore.stationList.length>0) {
-            var stations = TransactionStore.stationList.map(item=>item.station_id);
-            this.getTransactionList(this.state.pagination.size, this.state.pagination.current,stations);
-        }
-    }
-
-    selectAllHandler(ev) {
-        if (this.refs.selectAll.checked) {
-            TransactionAction.updateSelectedStations(this.state.stationList.map(item=>item.station_id),2);
-        } else {
-            TransactionAction.updateSelectedStations([],2);
-        }
-    }
-
-    selectSingle(station_id) {
-        var selectedStationList = TransactionStore.selectedStationList;
-        if (selectedStationList.indexOf(station_id) === -1) {
-            selectedStationList.push(station_id);
-        } else {
-            selectedStationList = selectedStationList.filter((item, index)=>(item != station_id))
-        }
-        TransactionAction.updateSelectedStations(selectedStationList,2);
-    }
-    queryHandler() {
-        if (this.state.selectedStationList.length==0) {
-            alert('选择油站不能为空哦，请重新选择~');
-            return false;
-        }
-        const pager = this.state.pagination;
-        pager.current = 1;
-        pager.size = 10;
-
-        this.setState({
-            pagination: pager
-        });
-        this.getTransactionList(pager.size, pager.current,this.state.selectedStationList);
-    }
-
-    getTransactionList(size, page, stations) {
-        // 取得操作员列表信息
-        var stationList = stations;
-        var order_id = this.refs.orderID?this.refs.orderID.value:'';
-        var time_array = this.refs.time ? this.refs.time.state.value:'';
-        var start_date = '';
-        var end_date = '';
-        if (time_array&&time_array[0]&&time_array[1]) {
-            start_date = new Date(time_array[0].time).format();
-            end_date = new Date(time_array[1].time).format();
-        }
-
+    getTransactionList(size, page, stations) {//request server
+        var params = this.getParams();
         var reqData = {
             size: size,
             page: page,
             stations: stations,
-            order_id: order_id,
-            start_date: start_date,
-            end_date: end_date
+            order_id: params.order_id,
+            start_date: params.start_date,
+            end_date: params.end_date
         };
         this.setState({loading: true});
         Query.get(oilConst.reqTransactionList, reqData, function (data) {
@@ -209,26 +154,81 @@ class PageTransaction extends React.Component {
         }.bind(this));
     }
 
-    exportTransaction() {
+    goDetail(text, record) {//jump to PageTransactionDetails
+        this.context.router.push(`pageTransactionDetail/${record.station_id}/${record.order_id}`);
+    }
+
+    selectAllHandler() {//全选
+        if (this.refs.selectAll.checked) {
+            TransactionAction.updateSelectedStations(TransactionStore.stationList.map(item=>item.station_id),2);
+        } else {
+            TransactionAction.updateSelectedStations([],2);
+        }
+    }
+
+    selectSingleHandler(station_id) {//单选
+        var selectedStationList = TransactionStore.selectedStationList;
+        if (selectedStationList.indexOf(station_id) === -1) {
+            selectedStationList.push(station_id);
+        } else {
+            selectedStationList = selectedStationList.filter((item)=>(item != station_id))
+        }
+        TransactionAction.updateSelectedStations(selectedStationList,2);
+    }
+
+    queryHandler() {//查询
         if (this.state.selectedStationList.length==0) {
-            alert('选择油站不能为空哦，请重新选择~');
+            this.alertMessage('选择油站不能为空哦，请重新选择~');
             return false;
         }
-        // 取得操作员列表信息
-        var stations = this.state.selectedStationList;
-        var order_id = this.refs.orderID.value;
-        var time_array = this.refs.time.state ? this.refs.time.state.value:'';
+        var pager = this.state.pagination;
+        pager.current = 1;
+        pager.size = 10;
+
+        this.setState({
+            pagination: pager
+        });
+        this.getTransactionList(pager.size, pager.current,this.state.selectedStationList);
+    }
+
+    exportTransaction() {//导出excel
+        if (this.state.selectedStationList.length==0) {
+            this.alertMessage('选择油站不能为空哦，请重新选择~');
+            return false;
+        }
+        var params = this.getParams();
+        var stationsReq = this.state.selectedStationList.map((item)=>('stations%5B%5D='+item+'&')).reduce((pre,cur)=>(pre+cur));
+        var reqData = 'excel='+true+'&'+stationsReq+'order_id='+params.order_id+'&start_date='+params.start_date+'&end_date='+params.end_date;
+        var url = 'http://'+window.location.host+'/'+oilConst.reqTransactionList+'?'+reqData;
+        window.open(url);
+    }
+
+    alertMessage(title,content) {
+        Modal.error({
+            title: title,
+            content: content
+        });
+    }
+
+    getParams() {//获取请求参数
+        var order_id = this.refs.orderID ? this.refs.orderID.value:'';
+        var time_array = this.refs.time ? this.refs.time.state.value:'';
         var start_date = '';
         var end_date = '';
         if (time_array&&time_array[0]&&time_array[1]) {
             start_date = new Date(time_array[0].time).format();
             end_date = new Date(time_array[1].time).format();
         }
-        var stationsReq = stations.map((item)=>('stations%5B%5D='+item+'&')).reduce((pre,cur)=>(pre+cur));
-        var reqData = 'excel='+true+'&'+stationsReq+'order_id='+order_id+'&start_date='+start_date+'&end_date='+end_date;
-        var url = 'http://'+window.location.host+'/'+oilConst.reqTransactionList+'?'+reqData;
-        window.open(url);
+        return {order_id:order_id,start_date:start_date,end_date:end_date};
     }
+
+    componentWillMount() {
+        if (TransactionStore.stationList  && TransactionStore.stationList.length>0) {
+            var stations = TransactionStore.stationList.map(item=>item.station_id);
+            this.getTransactionList(this.state.pagination.size, this.state.pagination.current,stations);
+        }
+    }
+
     render() {
         var four_stations = '';
         var stations = TransactionStore.stationList;
@@ -243,13 +243,13 @@ class PageTransaction extends React.Component {
             (<ul className='fourStations'>
                 <li>油站：</li>
                 <li key='all'><label><input type='checkbox' name='checkAll' ref='selectAll'
-                                            checked = {this.state.selectedStationList.length>0 && this.state.selectedStationList.length === this.state.stationList.length}
+                                            checked = {this.state.selectedStationList.length>0 && this.state.selectedStationList.length === TransactionStore.stationList.length}
                                             onChange={this.selectAllHandler.bind(this)}/>全选</label></li>
                 {
                     show_stations.map((item, idx)=>(
                         <li key={idx}><label><input type='checkbox'
-                                                    checked={TransactionStore.selectedStationList&&TransactionStore.selectedStationList.indexOf(item.station_id)==-1?false:true}
-                                                    onChange={this.selectSingle.bind(this,item.station_id)}
+                                                    checked={TransactionStore.selectedStationList&&TransactionStore.selectedStationList.indexOf(item.station_id)===-1?false:true}
+                                                    onChange={this.selectSingleHandler.bind(this,item.station_id)}
                                                     name='station' value={item.station_id}/>{item.name}</label></li>
                     ))
                 }
@@ -278,8 +278,8 @@ class PageTransaction extends React.Component {
                             </tbody>
                         </table>
                         {four_stations}
-                        {more_stations?<QueryMore moreStations = {more_stations} singleSelected={this.selectSingle}/>:''}
-                        <div className='stationAmount'>选择油站数量：{this.state.selectedStationList.length}</div>
+                        {more_stations?<QueryMore moreStations = {more_stations} singleSelected={this.selectSingleHandler}/>:''}
+                        <p className='stationAmount'>选择油站数量：{this.state.selectedStationList.length}</p>
                     </div>
                 </section>
                 <section className='sec2-statistic'>
@@ -357,7 +357,7 @@ class QueryMore extends React.Component {
         const name = this.state.isShowMore?'bottom_none':'';
         return (
             <div className='moreStations'>
-                <span className={'lookMore'+' '+name} onClick={this.showMore.bind(this)}>查看更多<i className='icon-look_up'></i></span>
+                <span className={'lookMore '+name} onClick={this.showMore.bind(this)}>查看更多<i className='icon-look_up'></i></span>
                 {
                     this.state.isShowMore ? (
                         <div className='moreStationsList'>
