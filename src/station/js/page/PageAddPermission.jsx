@@ -111,11 +111,13 @@ class PageAddPermission extends React.Component {
 
         if (this.state.stations) {
             let stationInfo = this.state.stations;
-            for (let i = 0; i < stationInfo.length; i++) {
-                let optionDom = (<Option key={stationInfo[i].station_id}
-                                         value={stationInfo[i].station_id}>{stationInfo[i].name}</Option>);
+
+            for (let station of stationInfo) {
+                let optionDom = (<Option key={station.station_id}
+                                         value={station.station_id}>{station.name}</Option>);
                 optionArray.push(optionDom);
             }
+
         } else {
             console.debug('尚未取到油站列表');
         }
