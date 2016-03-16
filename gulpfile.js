@@ -46,13 +46,13 @@ var stripDebug = require('gulp-strip-debug');
 
 // Copy all files at the root level (app)
 gulp.task('copy', function () {
-    //gulp.src([
-    //    'src/admin/page/**'
-    //], {
-    //    dot: true
-    //}).pipe(gulp.dest(dest + "page")).pipe(plugins.size({
-    //    title: 'copy page'
-    //}));
+    gulp.src([
+        'src/station/font/**'
+    ], {
+        dot: true
+    }).pipe(gulp.dest(dest + "static/css")).pipe(plugins.size({
+        title: 'copy font'
+    }));
 
     gulp.src([
         'src/station/img/**',
