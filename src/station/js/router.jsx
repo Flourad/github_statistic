@@ -5,11 +5,12 @@
 import App from './Main.jsx';
 import Transaction from './page/PageTransaction.jsx';
 import Pagepermission from './page/PagePermission.jsx';
-import PageAddPermission from './page/PageAddPermission.jsx'
-import PageAttendance from './page/PageAttendance.jsx'
+import PageAddPermission from './page/PageAddPermission.jsx';
+import PageAttendance from './page/PageAttendance.jsx';
 import PageTransactionDetail from './page/PageTransactionDetails.jsx';
 import PageExtend from './page/PageExtend.jsx'
 import PageAttendanceDetail from './page/PageAttendanceDetail.jsx'
+import PageNearByUser from './page/PageNearByUser.jsx';
 
 let {Router,Route,hashHistory,IndexRoute } =ReactRouter;
 
@@ -24,6 +25,7 @@ ReactDOM.render(
             <Route path='pageAttendanceDetail/:stationId/:attendanceId' component={PageAttendanceDetail}/>
             <Route path='pageTransactionDetail/:stationID/:orderID' component={PageTransactionDetail}/>
             <Route path='pageextend' component={PageExtend}/>
+            <Route path='pagenearbyuser' component={PageNearByUser}/>
         </Route>
     </Router>
     , document.getElementById('container'));

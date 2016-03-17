@@ -58,7 +58,7 @@ class SilderBar extends React.Component {
                         </Menu.Item>
 
                         <Menu.Item>
-                            <Link to='/#/d'>
+                            <Link to='pagenearbyuser'>
                                 <i className="iconImage icon-opnearbyuser"></i>
                                 <label className='usertext'>{this.constText.opNearByUser}</label>
                                 <i className="iconArrow icon-arrow"></i>
