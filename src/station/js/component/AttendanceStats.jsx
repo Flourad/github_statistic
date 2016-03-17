@@ -2,6 +2,7 @@ const {Table} = AntD;
 import Query from '../Query.js';
 import Util from '../common/Util.js'
 import storeQueryAttendance from '../stores/AttendanceStore.jsx';
+const { Link } = ReactRouter;
 
 class AttendanceStats extends React.Component {
 
@@ -115,7 +116,6 @@ class AttendanceStats extends React.Component {
                        rowKey={record => record.squad_id}
                        useFixedHeader />
             </div>
-
         );
     }
 };
@@ -132,8 +132,8 @@ const columns = [
         key: 'number',
         title: '班次号',
         dataIndex: 'squad_id',
-        render(text) {
-            return <a href="#">{text}</a>;
+        render(text, record) {
+            return <Link to={`pageAttendanceDetail/${record.station_id}/${record.squad_id}`}>{text}</Link>
         }
     },
     {
