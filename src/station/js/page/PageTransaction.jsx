@@ -204,7 +204,7 @@ class PageTransaction extends React.Component {
         var params = this.getParams();
         var stationsReq = this.state.selectedStationList.map((item)=>('stations%5B%5D='+item+'&')).reduce((pre,cur)=>(pre+cur));
         var reqData = 'excel='+true+'&'+stationsReq+'order_id='+params.order_id+'&start_date='+params.start_date+'&end_date='+params.end_date;
-        var url = 'http://'+window.location.host+'/'+oilConst.reqTransactionList+'?'+reqData;
+        var url = 'http://'+window.location.host+oilConst.reqTransactionList+'?'+reqData;
         window.open(url);
     }
 
