@@ -65,7 +65,7 @@ class PageExtend extends React.Component {
 
         this.columns = [
             {
-                title: '序号777',
+                title: '序号',
                 dataIndex: 'num',
                 key: 'num',
                 render(text, record, index){
