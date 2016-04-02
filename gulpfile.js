@@ -39,7 +39,7 @@ var uglify = require('gulp-uglify');
 
 var root = './dist/';
 
-var dest = root + 'station/';
+var dest = root + 'statistic/';
 
 var connect = require("gulp-connect");
 var stripDebug = require('gulp-strip-debug');
@@ -47,7 +47,7 @@ var stripDebug = require('gulp-strip-debug');
 // Copy all files at the root level (app)
 gulp.task('copy', function () {
     gulp.src([
-        'src/station/font/**'
+        'src/statistic/font/**',
     ], {
         dot: true
     }).pipe(gulp.dest(dest + "static/css")).pipe(plugins.size({
@@ -55,8 +55,8 @@ gulp.task('copy', function () {
     }));
 
     gulp.src([
-        'src/station/img/**',
-        'src/station/icon/**'
+        'src/statistic/img/**'
+        //'src/statistic/icon/**'
     ], {
         dot: true
     }).pipe(imagemin({
@@ -72,7 +72,7 @@ gulp.task('copy', function () {
     }));
 
     gulp.src([
-        'src/station/index.html'
+        'src/statistic/index.html'
     ], {
         dot: true
     }).pipe(gulp.dest(root))
@@ -130,7 +130,7 @@ gulp.task('clean', del.bind(null, ['dist/*'], {
 
 gulp.task('buildlib', function () {
     return browserify({
-        entries: ['src/station/lib/lib.js']
+        entries: ['src/statistic/lib/lib.js']
     })
         .transform(babelify)
         .bundle()
@@ -175,7 +175,7 @@ function getFileList(dir) {
 }
 
 gulp.task('buildjs', function () {
-    var files = getFileList('src/station/js');
+    var files = getFileList('src/statistic/js');
 
     return watchify(browserify({
         entries: files
@@ -195,7 +195,7 @@ gulp.task('buildjs', function () {
 });
 
 gulp.task('buildreleasejs', function () {
-    var files = getFileList('src/station/js');
+    var files = getFileList('src/statistic/js');
 
     return browserify({
         entries: files
@@ -233,14 +233,14 @@ gulp.task('server', function () {
         livereload: false
     });
 
-    gulp.watch("src/station/sass/*", ["compass"]);
+    gulp.watch("src/statistic/sass/*", ["compass"]);
 
     require('./proxy.js');
     // opn("http://localhost:8000");
 });
 
 gulp.task('watchjs', function () {
-    gulp.watch("src/station/js/**/*", ["buildjs"]);
+    gulp.watch("src/statistic/js/**/*", ["buildjs"]);
 });
 
 gulp.task('buildall', ['copy', 'buildlib', 'buildjs', 'compass'], function () {

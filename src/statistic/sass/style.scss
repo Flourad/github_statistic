@@ -1,0 +1,50 @@
+@import 'layout';
+@import "reset";
+//@import "icon";
+@import 'antd';
+@import 'topMenu';
+
+
+$table-font-size:14px;
+
+html, body {
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
+  font-size: 14px;
+  //color: #333;
+  height: 100%;
+}
+
+.container {
+  position: relative;
+  height:100%;
+}
+
+#oilContent{
+  overflow: auto;
+  height: 100%;
+  padding: 60px 80px 0 80px;
+}
+
+
+.ant-table-pagination {
+  float: right;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  margin-right: 30px;
+}
+
+.ant-table {
+  font-size: $table-font-size;
+}
+
+
+.ant-btn-lg {
+  padding: 4px 15px 5px 15px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+
+
+
+

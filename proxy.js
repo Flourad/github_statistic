@@ -15,8 +15,8 @@ var SERVER_HOST = '127.0.0.1';
 var SERVER_PORT = 8080;
 //var OIL_SERVER_HOST = !TEST ? 'oil.baidu.com' : 'nj03-map-carlife-caroil01.nj03.baidu.com';
 //var OIL_SERVER_PORT = !TEST ? 80 : 8240;
-var OIL_SERVER_HOST =  'cp01-rdqa-dev316.cp01.baidu.com';
-var OIL_SERVER_PORT =  8244;
+var OIL_SERVER_HOST =  'data.cloudaice.com';
+var OIL_SERVER_PORT =  80;
 
 // calculate host ip dynamically
 var ifaces = os.networkInterfaces();
@@ -76,10 +76,8 @@ function modifyCache(headers) {
     });
 }
 
-var mock = require('./mock.js');
 http.createServer(function (proxyReq, proxyResp) {
     var params = url.parse(proxyReq.url, true);
-//    console.log(params);
     var headers = proxyReq.headers;
 
     var reqOptions = {
@@ -90,8 +88,12 @@ http.createServer(function (proxyReq, proxyResp) {
         method: proxyReq.method
     };
     console.log('params.pathname=',params.pathname);
-    console.log(params.pathname.substr(1, 'admin'.length));
-    if ('admin' === params.pathname.substr(1, 'admin'.length)) {
+    console.log(params.pathname.substr(1, 'chinamapajax'.length));
+    if ('chinamapajax' === params.pathname.substr(1, 'chinamapajax'.length) ||
+        'worldmapajax' === params.pathname.substr(1, 'worldmapajax'.length) ||
+        'githubworld' === params.pathname.substr(1, 'githubworld'.length) ||
+        'githubchina' === params.pathname.substr(1, 'githubchina'.length)
+    ) {
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
         headers.host = OIL_SERVER_HOST;
 //        if (params.query.hasOwnProperty('bduss')) {
@@ -113,7 +115,6 @@ http.createServer(function (proxyReq, proxyResp) {
     }
 
     var req = http.request(reqOptions, function (res) {
-//        res.pipe(proxyResp);
         console.log(req.method, req.path, res.statusCode);
         if (LOG_POST_BODY && req.method === 'POST') {
             console.log(req.postbody);
@@ -139,7 +140,7 @@ http.createServer(function (proxyReq, proxyResp) {
         });
         res.on('end', function () {
             proxyResp.end();
-            if (reqOptions.host === 'cp01-rdqa-dev316.cp01.baidu.com') {
+            if (reqOptions.host === 'data.cloudaice.com') {
 //                console.log(body);
             }
         });
