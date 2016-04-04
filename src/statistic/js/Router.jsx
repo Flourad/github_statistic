@@ -8,16 +8,16 @@ import PageWorldMap from './component/PageWorldMap.jsx';
 import PageChinaRank from './component/PageChinaRank.jsx';
 import PageWorldRank from './component/PageWorldRank.jsx';
 
-let {Router,Route,hashHistory,IndexRoute} =ReactRouter;
+let {Router,Route,hashHistory,IndexRoute,browserHistory} =ReactRouter;
 
 ReactDOM.render(
-    <Router history={hashHistory}>
+    <Router history={browserHistory}>
         <Route path='/' component={App}>
             <IndexRoute component={PageChinaMap}/>
-            <Route path='chinaMap' component={PageChinaMap}/>
-            <Route path='worldMap' component={PageWorldMap}/>
-            <Route path='chinaRank' component={PageChinaRank}/>
-            <Route path='worldRank' component={PageWorldRank}/>
+            <Route path='chinamappage' component={PageChinaMap}/>
+            <Route path='worldmappage' component={PageWorldMap}/>
+            <Route path='chinarankpage' component={PageChinaRank}/>
+            <Route path='worldrankpage' component={PageWorldRank}/>
         </Route>
     </Router>
     , document.getElementById('container'));

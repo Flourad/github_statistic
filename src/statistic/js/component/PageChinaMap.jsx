@@ -20,7 +20,7 @@ class PageChinaMap extends React.Component {
         myChart.setOption({
             title: {    //标题组件
                 show: true,
-                text: 'Github Data',
+                text: 'China Users Distribution',
                 left: 'center',
                 textStyle: {
                     //color: 'red'
@@ -72,21 +72,21 @@ class PageChinaMap extends React.Component {
         let me = this;
         $.ajax({
             type: 'post',
-            url: 'chinamapajax',
+            url: 'chinamap',
             dataType: 'json',
             success: function(result) {
                 console.log(result);
-                let data = [];
-                let score = [];
-                for (var key in result) {
-                    data.push({name: Util.chinaCityMap[key], value: result[key].score});
-                    score.push(result[key].score);
+                if (result.status === 0) {
+                    let data = result.locations.map((item)=>({name: Util.chinaCityMap[item.name], value: item.amount}));
+                    let score = result.locations.map((item)=> item.amount);
+                    let max = Math.max.apply(null, score);
+                    let min = Math.min.apply(null, score);
+                    console.log(data);
+                    console.log('--------------------',max,min);
+                    me.drawChinaMap(data,max,min);
+                } else {
+                    alert('Error');
                 }
-                console.log(data);
-                var max = Math.max.apply(null, score);
-                var min = Math.min.apply(null, score);
-                console.log('--------------------',max,min);
-                me.drawChinaMap(data,max,min);
 
             },
             error: function(e) {
@@ -97,7 +97,7 @@ class PageChinaMap extends React.Component {
 
     render() {
         return(
-           <div id='chinaMap' style={{width: '1000px',height:'400px'}}></div>
+           <div id='chinaMap' style={{width: '1200px',height:'600px'}}></div>
         )
     }
 }

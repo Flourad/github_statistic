@@ -2,15 +2,13 @@
 @import "reset";
 //@import "icon";
 @import 'antd';
-@import 'topMenu';
-
 
 $table-font-size:14px;
 
 html, body {
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
-  font-size: 14px;
-  //color: #333;
+  font-size: 20px;
+  color: #333;
   height: 100%;
 }
 
@@ -21,10 +19,38 @@ html, body {
 
 #oilContent{
   overflow: auto;
-  height: 100%;
-  padding: 60px 80px 0 80px;
+  //height: 100%;
+  position: relative;
+  top: 70px;
+  padding: 0 80px;
 }
 
+#topMenu {
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+
+  ul,li,a {
+    outline: none;
+  }
+  .ant-menu {
+    background: #0e78e7;
+    background: -webkit-linear-gradient(top,#0e7bef,#0d73da);
+    background: linear-gradient(to bottom,#0e7bef,#0d73da);
+    font-weight: 200;
+  }
+  .ant-menu-horizontal > .ant-menu-item > a, .ant-menu-horizontal > .ant-menu-submenu > a {
+    color: #fff
+  }
+
+  .mycurrent {
+    background: #075fb6;
+    background: -webkit-linear-gradient(top,#055fb8,#095fb3);
+    background: linear-gradient(to bottom,#055fb8,#095fb3);
+    box-shadow: inset 0 0 2px rgba(0,0,0,.12);
+  }
+
+}
 
 .ant-table-pagination {
   float: right;
@@ -42,6 +68,20 @@ html, body {
   padding: 4px 15px 5px 15px;
   font-size: 14px;
   border-radius: 4px;
+}
+
+.usersImg {
+  zoom: .1;
+  min-width: 460px;
+  min-height: 460px;
+}
+.total_records {
+  position: relative;
+  bottom: 40px;
+  font-size: 14px;
+}
+.ant-table td {
+  padding: 10px 8px;
 }
 
 

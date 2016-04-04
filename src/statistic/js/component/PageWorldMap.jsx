@@ -20,7 +20,7 @@ class PageWorldMap extends React.Component {
         console.log(myChart);
         let option = {
             title: {
-                text: 'Github Data',
+                text: 'World Users Distribution',
                 subtext: '',
                 sublink: '',
                 left: 'center',
@@ -69,20 +69,20 @@ class PageWorldMap extends React.Component {
         var thiz = this;
         $.ajax({
             type: 'post',
-            url: 'worldmapajax',
+            url: 'worldmap',
             dataType: 'json',
             success: function(result) {
                 console.log(result);
-                let data = [];
-                let score = [];
-                for (var key in result) {
-                    data.push({name: Util.worldNameMap[key], value: result[key].score});
-                    score.push(result[key].score);
+                if (result.status === 0) {
+                    let data = result.locations.map((item)=>({name: Util.worldNameMap[item.name], value: item.amount}));
+                    let amountArr = result.locations.map((item)=> item.amount);
+                    let max = Math.max.apply(null, amountArr);
+                    let min = Math.min.apply(null, amountArr);
+                    console.log('--------------------',max,min);
+                    thiz.drawWorldMap(data,max,min);
+                } else {
+                    alert('Error');
                 }
-                var max = Math.max.apply(null, score);
-                var min = Math.min.apply(null, score);
-                console.log('--------------------',max,min);
-                thiz.drawWorldMap(data,max,min);
             },
             error: function(e) {
 
@@ -91,10 +91,9 @@ class PageWorldMap extends React.Component {
 
     }
 
-
     render() {
         return(
-            <div id='worldMap' style={{width: '1000px',height:'400px'}}></div>
+            <div id='worldMap' style={{width: '1200px',height:'600px'}}></div>
         )
     }
 }

@@ -15,8 +15,11 @@ var SERVER_HOST = '127.0.0.1';
 var SERVER_PORT = 8080;
 //var OIL_SERVER_HOST = !TEST ? 'oil.baidu.com' : 'nj03-map-carlife-caroil01.nj03.baidu.com';
 //var OIL_SERVER_PORT = !TEST ? 80 : 8240;
-var OIL_SERVER_HOST =  'data.cloudaice.com';
-var OIL_SERVER_PORT =  80;
+//var OIL_SERVER_HOST =  'data.cloudaice.com';
+//var OIL_SERVER_PORT =  80;
+
+var OIL_SERVER_HOST =  'localhost';
+var OIL_SERVER_PORT =  9090;
 
 // calculate host ip dynamically
 var ifaces = os.networkInterfaces();
@@ -89,8 +92,8 @@ http.createServer(function (proxyReq, proxyResp) {
     };
     console.log('params.pathname=',params.pathname);
     console.log(params.pathname.substr(1, 'chinamapajax'.length));
-    if ('chinamapajax' === params.pathname.substr(1, 'chinamapajax'.length) ||
-        'worldmapajax' === params.pathname.substr(1, 'worldmapajax'.length) ||
+    if ('chinamap' === params.pathname.substr(1, 'chinamap'.length) ||
+        'worldmap' === params.pathname.substr(1, 'worldmap'.length) ||
         'githubworld' === params.pathname.substr(1, 'githubworld'.length) ||
         'githubchina' === params.pathname.substr(1, 'githubchina'.length)
     ) {

@@ -6,10 +6,6 @@ var AntD = require('antd');
 var Reflux = require('reflux');
 var Echarts = require('echarts/lib/echarts');
 
-// var AntD= {};
-// var Table=require('antd/lib/table');
-// AntD.Tabel=Table;
-
 window.$ = $;
 window.React = React;
 window.ReactDOM = ReactDOM;
