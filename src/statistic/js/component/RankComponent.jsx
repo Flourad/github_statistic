@@ -1,9 +1,12 @@
 /**
+ * Created by danyu on 4/4/16.
+ */
+/**
  * Created by danyu on 4/2/16.
  */
 let {Table} = AntD;
 
-class PageChinaRank extends React.Component {
+class RankComponent extends React.Component {
 
     constructor(props) {
         super(props);
@@ -17,7 +20,7 @@ class PageChinaRank extends React.Component {
                 size: 10,
                 // 总的条数
                 total: 0
-            },
+            }
         }
 
         this.columns = [{
@@ -36,7 +39,7 @@ class PageChinaRank extends React.Component {
                 )
             }
         }, {
-            title: 'score',
+            title: 'Score',
             dataIndex: 'followersCount'
         }, {
             title: 'Language',
@@ -45,7 +48,7 @@ class PageChinaRank extends React.Component {
             title: 'Location',
             dataIndex: 'location'
         }, {
-            title: 'profile',
+            title: 'Profile',
             dataIndex: 'gravatar',
             render(text) {
                 return(<img src={text} className = 'usersImg'/>)
@@ -63,7 +66,7 @@ class PageChinaRank extends React.Component {
                 page_size:page_size,
                 current_page:current_page
             },
-            url: 'githubworld',
+            url: me.props.reqUrl,
             dataType: 'json',
             success: function(result) {
                 console.log('dddddddd',result);
@@ -108,6 +111,8 @@ class PageChinaRank extends React.Component {
 
         this.requestData(pager.size, pager.current);
     }
+
+
 }
 
-export default PageChinaRank;
+export default RankComponent;

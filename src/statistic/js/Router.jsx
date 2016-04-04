@@ -3,10 +3,10 @@
  */
 
 import App from './Main.jsx';
-import PageChinaMap from './component/PageChinaMap.jsx';
-import PageWorldMap from './component/PageWorldMap.jsx';
-import PageChinaRank from './component/PageChinaRank.jsx';
-import PageWorldRank from './component/PageWorldRank.jsx';
+import PageChinaMap from './page/PageChinaMap.jsx';
+import PageWorldMap from './page/PageWorldMap.jsx';
+import PageChinaRank from './page/PageChinaRank.jsx';
+import PageWorldRank from './page/PageWorldRank.jsx';
 
 let {Router,Route,hashHistory,IndexRoute,browserHistory} =ReactRouter;
 

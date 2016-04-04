@@ -54,22 +54,22 @@ gulp.task('copy', function () {
         title: 'copy font'
     }));
 
-    gulp.src([
-        'src/statistic/img/**'
-        //'src/statistic/icon/**'
-    ], {
-        dot: true
-    }).pipe(imagemin({
-            optimizationLevel: 3,
-            progressive: true,
-            interlaced: true,
-            use: [pngquant({
-                quality: '50-60'
-            })]
-        }))
-        .pipe(gulp.dest(dest + 'static/img')).pipe(plugins.size({
-        title: 'copy image'
-    }));
+    //gulp.src([
+    //    'src/statistic/img/**'
+    //    //'src/statistic/icon/**'
+    //], {
+    //    dot: true
+    //}).pipe(imagemin({
+    //        optimizationLevel: 3,
+    //        progressive: true,
+    //        interlaced: true,
+    //        use: [pngquant({
+    //            quality: '50-60'
+    //        })]
+    //    }))
+    //    .pipe(gulp.dest(dest + 'static/img')).pipe(plugins.size({
+    //    title: 'copy image'
+    //}));
 
     gulp.src([
         'src/statistic/index.html'
