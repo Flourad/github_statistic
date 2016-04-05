@@ -37,6 +37,8 @@ var exec = require('child_process').exec;
 // 压缩
 var uglify = require('gulp-uglify');
 
+var historyApiFallback = require('connect-history-api-fallback');
+
 var root = './dist/';
 
 var dest = root + 'statistic/';
@@ -230,7 +232,19 @@ gulp.task('server', function () {
     connect.server({
         root: ["./dist"],
         port: 8080,
-        livereload: false
+        livereload: true,
+        //fallBack: './index.html'
+        middleware: function(connect, opt) {
+            return [ historyApiFallback({
+                rewrites: [
+                    { from: '/chinamappage', to: '/index.html'},
+                    { from: '/worldmappage', t o: '/index.html'},
+                    { from: '/chinarankpage', to: '/index.html'},
+                    { from: '/worldrankpage', to: '/index.html'}
+                ],
+                verbose: true
+            }) ];
+        }
     });
 
     gulp.watch("src/statistic/sass/*", ["compass"]);

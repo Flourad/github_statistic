@@ -75,7 +75,7 @@ class MapComponent extends React.Component {
     componentDidMount() {
         let me = this;
         $.ajax({
-            type: 'post',
+            type: 'get',
             url: me.props.reqUrl,
             dataType: 'json',
             success: function(result) {

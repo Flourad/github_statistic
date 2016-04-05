@@ -91,12 +91,11 @@ http.createServer(function (proxyReq, proxyResp) {
         method: proxyReq.method
     };
     console.log('params.pathname=',params.pathname);
-    console.log(params.pathname.substr(1, 'chinamapajax'.length));
-    if ('chinamap' === params.pathname.substr(1, 'chinamap'.length) ||
-        'worldmap' === params.pathname.substr(1, 'worldmap'.length) ||
-        'githubworld' === params.pathname.substr(1, 'githubworld'.length) ||
-        'githubchina' === params.pathname.substr(1, 'githubchina'.length)
-    ) {
+
+    var pathName = params.pathname;
+
+    if (pathName === '/chinamap' || pathName === '/worldmap' || pathName === '/githubchina' || pathName === '/githubworld')
+    {
         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
         headers.host = OIL_SERVER_HOST;
 //        if (params.query.hasOwnProperty('bduss')) {

@@ -1,5 +1,5 @@
 {
-  "name": "Github Data Statistic",
+  "name": "github_statistic",
   "description": "Github Data Statistic",
   "main": "index.html",
   "scripts": {
@@ -58,6 +58,7 @@
     "watchify": "^0"
   },
   "dependencies": {
+    "connect-history-api-fallback": "^1.1.0",
     "echarts": "^3.1.3"
   }
 }
