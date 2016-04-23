@@ -12,7 +12,7 @@ class PageChinaRank extends React.Component {
 
     render() {
         return(
-            <RankComponent reqUrl='githubchina'/>
+            <RankComponent type='chinaRank' reqUrl='githubchina'/>
         )
     }
 

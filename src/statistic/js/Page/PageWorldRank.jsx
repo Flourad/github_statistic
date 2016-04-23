@@ -1,6 +1,7 @@
 /**
  * Created by danyu on 4/2/16.
  */
+ 
 let RankComponent = require('../component/RankComponent.jsx');
 
 class PageWorldRank extends React.Component {
@@ -11,7 +12,7 @@ class PageWorldRank extends React.Component {
 
     render() {
         return(
-            <RankComponent reqUrl='githubworld'/>
+            <RankComponent type='worldRank' reqUrl='githubworld'/>
         )
     }
 }

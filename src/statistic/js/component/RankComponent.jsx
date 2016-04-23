@@ -1,26 +1,21 @@
 /**
  * Created by danyu on 4/4/16.
  */
-/**
- * Created by danyu on 4/2/16.
- */
+
 let {Table} = AntD;
+import {ChinaRankStore, WorldRankStore} from '../Stores/RankStore.jsx';
+import {ChinaRankAction, WorldRankAction} from '../Actions/RankAction.jsx';
 
 class RankComponent extends React.Component {
 
     constructor(props) {
         super(props);
+        let store = this.props.type === 'chinaRank' ? ChinaRankStore:WorldRankStore;
+        console.log(this.props.type);
         this.state = {
             dataSource: undefined,
             loading: false,
-            pagination: {
-                // 当前页
-                current: 1,
-                // 每页显示的条数
-                size: 10,
-                // 总的条数
-                total: 0
-            }
+            pagination: store.pagination
         }
 
         this.columns = [{
@@ -33,14 +28,14 @@ class RankComponent extends React.Component {
             title: 'Name',
             dataIndex: 'name',
             render(text, record) {
-                console.log(text,record);
+                // console.log(text,record);
                 return(
-                    <span><a href={'https://github.com/'+record.login}>{record.login}</a>{' ('+text+')'}</span>
+                    <span><a target="_blank" href={'https://github.com/'+record.login}>{record.login}</a>{' ('+text+')'}</span>
                 )
             }
         }, {
             title: 'Score',
-            dataIndex: 'followersCount'
+            dataIndex: 'score'
         }, {
             title: 'Language',
             dataIndex: 'language'
@@ -69,12 +64,16 @@ class RankComponent extends React.Component {
             url: me.props.reqUrl,
             dataType: 'json',
             success: function(result) {
-                console.log('dddddddd',result);
+                // console.log('dddddddd',result);
                 if (result.status === 0) {
                     me.setState({loading: false});
-                    console.log(result.users);
+                    // console.log(result.users);
                     me.setState({dataSource:result.users});
-                    me.setState({pagination: {total: result.total}})
+                    // me.setState({pagination: {total: result.total}})
+                    let rankAction = me.props.type === 'chinaRank' ? ChinaRankAction:WorldRankAction;
+                    let pagination = me.state.pagination;
+                    pagination.total = result.total;
+                    rankAction.updatePagination(pagination);
                 } else {
                     alert('Error~');
                 }
@@ -86,8 +85,19 @@ class RankComponent extends React.Component {
 
     }
 
+    updateRank(data) {
+        this.setState({pagination: data});
+    }
+
     componentDidMount() {
+
+        let store = this.props.type === 'chinaRank' ? ChinaRankStore:WorldRankStore;
+        // 监听store
+        this.unsubscribe = store.listen(this.updateRank.bind(this));
         this.requestData(this.state.pagination.size,this.state.pagination.current);//第一次请求数据
+    }
+    componentWillUnmount() {
+        this.unsubscribe();
     }
 
     render() {
@@ -105,9 +115,12 @@ class RankComponent extends React.Component {
         pager.current = pagination.current;
         pager.size = 10;
 
-        this.setState({
-            pagination: pager
-        });
+        // this.setState({
+        //     pagination: pager
+        // });
+
+        let rankAction = this.props.type === 'chinaRank' ? ChinaRankAction:WorldRankAction;
+        rankAction.updatePagination(pager);
 
         this.requestData(pager.size, pager.current);
     }

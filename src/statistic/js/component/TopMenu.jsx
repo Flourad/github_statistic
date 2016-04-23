@@ -21,7 +21,6 @@ class TopMenu extends React.Component {
         });
     }
     render() {
-        console.log('rrrrrrrrrrrr',window.location,window.location.href);
         let path = window.location.pathname;
         console.log(path);
         return (
